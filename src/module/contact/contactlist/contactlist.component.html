@@ -1,0 +1,19 @@
+<!-- contact list -->
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Surname</th>
+      </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let contact of contactList">
+            <tr>
+                <td>{{contact.id}}</td>
+                <td>{{contact.name}}</td>
+                <td>{{contact.surname}}</td>
+            </tr>
+        </ng-container>
+    </tbody>
+  </table>

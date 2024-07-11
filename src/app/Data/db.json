@@ -1,0 +1,29 @@
+{
+  "Contacts": [
+    {
+      "id": 1,
+      "name": "John",
+      "surname": "dow"
+    },
+    {
+        "id":2,
+        "name":"jay",
+        "surname":"dev"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "text": "a comment about post 1",
+      "postId": "1"
+    },
+    {
+      "id": "2",
+      "text": "another comment about post 1",
+      "postId": "1"
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
