@@ -1,12 +1,4 @@
-/* *{
-    height: 100%;
-} */
-.contact-container {
-    height: 100%;
-    padding: 25px;
-    
-  }
-  .contact-sidenav{
+.contact-sidenav{
     width: 300px;
     padding-top: 25px;
     padding-left: 25px;
@@ -57,10 +49,5 @@
 .contact-feature-btn-sub:hover {
     background-position: left;
 }
-.clickable {
-    cursor: pointer;
-}
-.clicked{
-    background-color:#ffe792 ;
-}
+
   

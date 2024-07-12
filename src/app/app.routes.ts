@@ -1,10 +1,8 @@
 import { Routes } from '@angular/router';
-import { EditComponent } from './contact/edit/edit.component';
 import { ContactComponent } from './contact/contact.component';
 import { AuthComponent } from './auth/auth.component';
 
 export const routes: Routes = [
-
     {
         path:'',
         redirectTo:'/contact',

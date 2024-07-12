@@ -1,3 +1,5 @@
 export const  APIURL = {
-    getContact:"Contacts"
+    getContact:"Contacts/",
+    deleteContact:"Contacts/",
+    editContact:"Contacts/"
 }

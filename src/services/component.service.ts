@@ -21,4 +21,11 @@ export class ComponentService {
   {
     return this.http.get<result<T>[]>(webAPIURL + APIURL.getContact)
   }
+
+  deleteContact(id:number){
+    return this.http.delete<boolean>(webAPIURL + APIURL.deleteContact +id)
+  }
+  UpdateContact<T>(id:number ,data:result<T>){
+    return this.http.patch<boolean>(webAPIURL+APIURL.editContact +id , data)
+  }
 }

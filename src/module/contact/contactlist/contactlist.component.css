@@ -1,0 +1,18 @@
+.contact-data{
+    font: 20px Arial;
+    display: inline-block;
+    padding: 1em 1em;
+    text-align: left;
+    color: black;
+    border-radius: 25px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 25px;
+}
+.mat-elevation-z8{
+    border-radius: 15px;
+}
+button{
+    border: none;
+    background-color: transparent;
+}

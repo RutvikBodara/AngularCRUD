@@ -1,0 +1,15 @@
+<div class="filter-contact d-flex justify-content-between">
+
+    <div class="d-flex gap-3">
+    <button mat-fab (click)="onClickToggle()">
+        <mat-icon  mat-button role="img" class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">menu</mat-icon>
+    </button>
+    <h2 class="mt-2">{{currentPage}}</h2>
+    </div>
+    <mat-form-field class="search" appearance="outline">
+        <mat-label>search on {{currentPage.toLowerCase()}}</mat-label>
+        <input class="search" matInput placeholder="ex:john!">
+        <mat-icon matSuffix>search</mat-icon>
+        <!-- <mat-hint>ex:john!</mat-hint> -->
+    </mat-form-field>
+</div>
