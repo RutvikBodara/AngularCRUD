@@ -1,0 +1,31 @@
+<ng-container class="mt-3 gap-2">
+    <div class="text-center mt-4">
+      <h2>Create New Contact</h2>
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="m-3" appearance="outline">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="name" placeholder="first name">
+          <mat-error *ngIf="contactForm.get('name').hasError('required')">
+            First name is required
+          </mat-error>
+          <mat-error *ngIf="contactForm.get('name').hasError('minlength')">
+            Minimum 3 characters required
+          </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="m-3" appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="surname" placeholder="last name">
+          <mat-error *ngIf="contactForm.get('surname').hasError('required')">
+            Last name is required
+          </mat-error>
+          <mat-error *ngIf="contactForm.get('surname').hasError('minlength')">
+            Minimum 3 characters required
+          </mat-error>
+        </mat-form-field>
+        <br>
+        <button mat-fab extended type="submit" [disabled]="contactForm.invalid">Submit</button>
+      </form>
+    </div>
+  </ng-container>
+  

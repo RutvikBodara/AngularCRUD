@@ -1,0 +1,41 @@
+<div class="p-4" aria-colspan="accordiondiv">
+    <mat-accordion>
+        <ng-container *ngFor="let object of dataSource; let index=index">
+            <mat-expansion-panel [expanded]="currentIndex === index" (opened)="setStep(index)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <ng-container *ngIf="editedRowIndex !== index; else contactType">
+                        {{object.id}}
+                        {{object.name}}
+                    </ng-container>
+                    <ng-template #contactType>
+                        <input matInput value="{{editedRow.name}}" [(ngModel)]="editedRow.name"/>
+                    </ng-template>
+                </mat-panel-title>
+                <mat-panel-description>
+                    {{object.count}}
+                    <mat-icon>profile</mat-icon>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-container  *ngIf="editedRowIndex !== index; else editBtn">
+                <button class="btn btn-primary me-3" (click)="startEdit(object,index)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit</span>
+                </button>
+                <button  class="btn btn-danger"  (click)="deleteContact(object)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete</span>
+                </button>
+            </ng-container>
+            <ng-template #editBtn>
+                <button class="btn btn-success" (click)="editContact(object)">save</button>
+                <button class="btn btn-light" (click)="cancelEdit()">Cancel</button>
+            </ng-template>
+            <mat-action-row>
+                <button mat-button (click)="prevStep()" [hidden]="index === 0">prev</button>
+                <button mat-button (click)="nextStep()" [hidden]="index === countrow-1">Next</button>
+            </mat-action-row>
+        </mat-expansion-panel>
+    </ng-container>
+</mat-accordion>
+</div>

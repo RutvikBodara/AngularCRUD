@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatDrawer, MatSidenavModule} from '@angular/material/sidenav';
 import { SidebarComponent } from '../../module/sidebar/sidebar/sidebar.component';
 import { FilterComponent } from '../../module/filter/filter.component';
+import { CommonService } from '../../services/common.service';
 @Component({
   selector: 'app-contact',
   standalone: true,
@@ -16,15 +17,18 @@ import { FilterComponent } from '../../module/filter/filter.component';
 })
 export class ContactComponent {
   @ViewChild('drawer') sideBar :MatDrawer;
-  constructor(){}
+
+  constructor(private commonService :CommonService){}
   onToggle(){
     this.sideBar.toggle();
   }
+  // currentClickedBtn:string ="Dashboard"
+  // toggleDiv(value: string) {
+  //   // this.currentClickedBtn =div
+  //   this.commonService.updatePage(value)
+  // }
 
-  currentClickedBtn:string ="Dashboard"
-  toggleDiv(div: string) {
-    this.currentClickedBtn =div
-  }
-
+  // onSearch(value:string){
+  // }
   
 }

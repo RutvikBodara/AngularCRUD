@@ -1,0 +1,19 @@
+<ng-container class="p-5">
+    <form [formGroup]="contactTypeForm" (ngSubmit)="onSubmit()">
+    <div class="text-center">
+        <h1 mat-dialog-title>Add New List</h1>
+        <div mat-dialog-content>
+                <mat-form-field class="m-3" appearance="outline">
+                  <mat-label>List Name</mat-label>
+                  <input matInput formControlName="name" placeholder="List name">
+                  <mat-error *ngIf="contactTypeForm.get('name').hasError('required')">
+                    List name is required
+                  </mat-error>
+                </mat-form-field>
+            </div>
+            <div mat-dialog-actions>
+                <button  mat-fab extended type="submit" [disabled] ="contactTypeForm.invalid" >Add</button>
+            </div>
+        </div>
+    </form>
+</ng-container>
