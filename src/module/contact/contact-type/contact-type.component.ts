@@ -72,10 +72,10 @@ export class ContactTypeComponent {
   getContactType(){
     this.componentServices.get<string>(APIURL.getContactType,this.name,null,this.id).subscribe(
       (result)=>{
-        console.log(result)
-        this._snackBar.open(`${result.message}`,"close", {
-          duration: 3000
-        })
+        if(result.code == 106){
+          
+        }
+        this.commonService.showSnackBar(`${result.message}`)
          this.dataSource =result.responseData
       },
       (error)=>{
@@ -98,33 +98,29 @@ export class ContactTypeComponent {
     this.componentServices.update(row,APIURL.editContactType).subscribe(
       (result:result<string>)=>{
         if(result.code === 102 ){
-          this._snackBar.open("invalid data","CLOSE")
+          this.commonService.showSnackBar("invalid data")
         }
         else{
           this.getContactType()
-          this._snackBar.open("Updated record successfully","CLOSE")
+          this.commonService.showSnackBar("Updated record successfully")
           this.cancelEdit();
         }
       },
       (error)=>{
-        console.log("something went wrong")
+        this.commonService.showSnackBar("something went wrong")
       }
     )
   }
   
   deleteContact(row:responseData<string>){
     if(row.count > 0){
-      this._snackBar.open("this list has a contacts","CLOSE", {
-        duration: 3000
-      })
+      this.commonService.showSnackBar("this list has a contacts")
     }
     else{
       this.componentServices.delete<string>(row.id,APIURL.deleteContacttype).subscribe(
         ()=>{
           this.getContactType()
-          this._snackBar.open("deleted record successfully","CLOSE", {
-            duration: 3000
-          })
+          this.commonService.showSnackBar("deleted record successfully")
         },
         (error)=>{
           console.log("something went wrong")

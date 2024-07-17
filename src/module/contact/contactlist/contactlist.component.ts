@@ -37,6 +37,7 @@ export class ContactlistComponent {
   name:string ="";
   surname:string="";
   id:number=undefined;
+  errorMessage:String = "No Data Found";
   ngOnInit(){
     // this.getContact()
     this.commonService.updatePage("Dashboard")
@@ -69,9 +70,14 @@ export class ContactlistComponent {
   getContact(){
     this.componentServices.get<string>(APIURL.getContact,this.name,this.surname,this.id,this.contactList).subscribe(
       (result:result<string>)=>{
-         this.dataSource =result.responseData
-         this.dataSourceCount =result.responseData.length
-         console.log(this.dataSourceCount)
+        if(result.code == 106){
+          this.errorMessage ="You Are Not Authorized To Do This Action"
+          this.dataSourceCount =0
+        }
+        else{
+          this.dataSource =result.responseData
+          this.dataSourceCount =result.responseData.length
+        }
       },
       (error)=>{
         console.log(error)
@@ -93,11 +99,14 @@ export class ContactlistComponent {
     this.componentServices.update(row,APIURL.editContact).subscribe(
       (result:result<string>)=>{
         if(result.code === 102 ){
-          this._snackBar.open("invalid data","CLOSE")
+          this.commonService.showSnackBar(result.message)
+        }
+        else if(result.code == 106){
+          this.errorMessage ="You Are Not Authorized To Do This Action"
         }
         else{
           this.getContact()
-          this._snackBar.open("Updated record successfully","CLOSE")
+          this.commonService.showSnackBar("Updated record successfully")
           this.cancelEdit();
         }
       },
@@ -109,9 +118,14 @@ export class ContactlistComponent {
 
   deleteContact(id:number) {
     this.componentServices.delete<string>(id,APIURL.deleteContact).subscribe(
-      ()=>{
-        this.getContact()
-        this._snackBar.open("deleted record successfully","CLOSE")
+      (result)=>{
+        if(result.code == 106){
+          this.commonService.showSnackBar(result.message)
+        }
+        else{
+          this.getContact()
+          this.commonService.showSnackBar("deleted record successfully")
+        }
       },
       (error)=>{
         console.log("something went wrong")

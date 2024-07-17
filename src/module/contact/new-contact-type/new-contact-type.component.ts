@@ -19,6 +19,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { CommonService } from '../../../services/common.service';
 @Component({
   selector: 'app-new-contact-type',
   imports: [CommonModule, FormsModule, ReactiveFormsModule,MatInputModule,MatFormFieldModule,MatIconModule,MatDividerModule,MatButtonModule],
@@ -27,7 +28,7 @@ import { Router } from '@angular/router';
   styleUrl: './new-contact-type.component.css'
 })
 export class NewContactTypeComponent {
-  constructor(private router:Router,private dialogRef: MatDialogRef<NewContactTypeComponent>,private formbuilderinstance:FormBuilder ,private componentServices:ComponentService,private _snackBar:MatSnackBar){}
+  constructor(private commonService :CommonService,private router:Router,private dialogRef: MatDialogRef<NewContactTypeComponent>,private formbuilderinstance:FormBuilder ,private componentServices:ComponentService,private _snackBar:MatSnackBar){}
   contactTypeForm: FormGroup;
   requestValue:responseData<string>
   ngOnInit(){
@@ -49,14 +50,13 @@ export class NewContactTypeComponent {
 
       this.componentServices.add<string>(this.requestValue,APIURL.AddContactType).subscribe(
         (result)=>{
-          this._snackBar.open("Add Contact List successfully","CLOSE", {
-            duration: 3000
-          })
+          this.commonService.showSnackBar("Add Contact List successfully")
           this.dialogRef.close()
           const currentUrl = this.router.url;
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
                this.router.navigate([currentUrl]);
           });
+          // this.router.getCurrentNavigation();
         },
         (error)=>{
           console.log(error)

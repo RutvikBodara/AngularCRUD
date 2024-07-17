@@ -18,6 +18,7 @@ import { APIURL } from '../../../environment/redirection';
 import { NewContactTypeComponent } from '../new-contact-type/new-contact-type.component';
 import { CommonService } from '../../../services/common.service';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { error } from 'console';
 
 
 @Component({
@@ -36,11 +37,11 @@ export class NewContactTypeAccordionComponent {
   id:number=undefined;
   contactList:string=""
   currentIndex = 0;
-  countrow:number =0;
-  
+  countrow:number;
+  errorMessage:String = "No Data Found";
+
   ngOnInit(){
     // this.getContactType()
-    console.log("enter in the contact type")
     this.commonService.updatePage("Contact Type")
     this.commonService.searchstring$.subscribe((value:number|string)=>{
       if(typeof value === 'number'){
@@ -57,7 +58,15 @@ export class NewContactTypeAccordionComponent {
         this.name =value
       }
       this.getContactType()
-    });
+    },
+    (error)=>{
+      this.commonService.showSnackBar(error);
+    },
+    ()=>{
+      console.log("completed")
+    }
+  
+  );
 
     this.commonService.searchContactType$.subscribe((value:string)=>{
       this.contactList=value
@@ -82,15 +91,19 @@ export class NewContactTypeAccordionComponent {
     console.log(this.contactList)
     this.componentServices.get<string>(APIURL.getContactType,this.name,null,this.id,this.contactList).subscribe(
       (result)=>{
-        console.log(result)
-        this._snackBar.open(`${result.message}`,"close", {
-          duration: 3000
-        })
-         this.dataSource =result.responseData
-         this.countrow =result.responseData.length
+
+        if(result.code ==106){
+          this.errorMessage = "You Are Not Authorized To Do This Action"
+          this.countrow =0;
+        }
+        else{
+          this.commonService.showSnackBar(`${result.message}`)
+          this.dataSource =result.responseData
+          this.countrow =result.responseData.length
+        }
       },
       (error)=>{
-        console.log(error)
+        this.commonService.showSnackBar(error)
       }
     )
   }
@@ -108,37 +121,33 @@ export class NewContactTypeAccordionComponent {
   editContact(row:responseData<string>) {
     this.componentServices.update(row,APIURL.editContactType).subscribe(
       (result:result<string>)=>{
-        if(result.code === 102 ){
-          this._snackBar.open("invalid data","CLOSE")
+        if(result.code === 102){
+          this.commonService.showSnackBar("invalid data")
         }
         else{
           this.getContactType()
-          this._snackBar.open("Updated record successfully","CLOSE")
+          this.commonService.showSnackBar("Updated record successfully")
           this.cancelEdit();
         }
       },
       (error)=>{
-        console.log("something went wrong")
+        this.commonService.showSnackBar("something went wrong")
       }
     )
   }
 
   deleteContact(row:responseData<string>){
     if(row.count > 0){
-      this._snackBar.open("this list has a contacts","CLOSE", {
-        duration: 3000
-      })
+      this.commonService.showSnackBar("this list has a contacts,delete contacts first")
     }
     else{
       this.componentServices.delete<string>(row.id,APIURL.deleteContacttype).subscribe(
         ()=>{
           this.getContactType()
-          this._snackBar.open("deleted record successfully","CLOSE", {
-            duration: 3000
-          })
+          this.commonService.showSnackBar("deleted record successfully")
         },
         (error)=>{
-          console.log("something went wrong")
+          this.commonService.showSnackBar("something went wrong")
         }
       )
     }

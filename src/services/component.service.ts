@@ -48,6 +48,8 @@ export class ComponentService {
     return this.http.delete<result<T>>(webAPIURL + suburl,{params:parameters})
   }
   update<T>(data:responseData<T>,suburl:string){
+    console.log(data);
+    console.log("dsfa")
     return this.http.patch<result<T>>(webAPIURL+suburl,data)
   }
   // updateContactType<T>(data:responseData<T>){
@@ -73,5 +75,4 @@ export class ComponentService {
   //   }
   //   return this.http.get<result<T>>(webAPIURL + APIURL.getContactType,{params:parameters})
   // }
-  
 }

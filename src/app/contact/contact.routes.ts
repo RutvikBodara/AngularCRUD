@@ -14,7 +14,7 @@ export const routes: Route[] = [
         pathMatch:"full"
     },
     {
-        path:'contact',
+        path:'contactdetails',
         component:ContactlistComponent
     },
     {

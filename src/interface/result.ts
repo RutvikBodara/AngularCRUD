@@ -8,5 +8,4 @@ export class responseData<T>{
     name:T;
     surname:T;
     count?:number
-    
 }

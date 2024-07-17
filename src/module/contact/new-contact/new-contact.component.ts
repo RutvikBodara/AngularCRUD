@@ -32,6 +32,8 @@ export class NewContactComponent {
   constructor(private commonService: CommonService,private router :Router, private formbuilderinstance: FormBuilder, private componentServices:ComponentService,private _snackBar:MatSnackBar){}
   contactForm: FormGroup;
   requestValue:responseData<string>
+  errorMessage:string ="Something Went Wrong"
+  authorized:boolean =true;
   ngOnInit(){
     this.commonService.updatePage("Create New Cotact")
     this.contactForm =this.formbuilderinstance.group({
@@ -52,11 +54,17 @@ export class NewContactComponent {
 
       this.componentServices.add<string>(this.requestValue,APIURL.AddContact).subscribe(
         (result)=>{
-          this._snackBar.open("Add Contact successfully","CLOSE")
-          this.router.navigate(['']);
+          if(result.code ==106){
+                this.authorized=false;
+                this.errorMessage ="You Are Not Authorized To Do This Action"
+          }
+          else{
+            this.commonService.showSnackBar("Add Contact successfully")
+            this.router.navigate(['']);
+          }
         },
         (error)=>{
-          console.log(error)
+          this.commonService.showSnackBar(error)
         }
       )
     } 
