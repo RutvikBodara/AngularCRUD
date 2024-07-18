@@ -3,6 +3,9 @@
   <mat-icon>home</mat-icon>
   Home
 </button> -->
- <router-outlet>
+<div (click)="addCallAnimation($event)">
+  <div *ngFor="let call of calls; let index=index" class="call" [style.top.px]="call.top" [style.left.px]="call.left"  [@fadeoutanimation]="index">&#9733;</div>
+  <router-outlet>
   </router-outlet>
 
+</div>

@@ -19,6 +19,7 @@ import { fromEvent } from 'rxjs';
 export class ContactComponent {
   @ViewChild('drawer') sideBar :MatDrawer;
   @ViewChild('newContact') newContactBtn : ElementRef;
+
   constructor(private router :Router, private commonService :CommonService){}
   onToggle(){
     this.sideBar.toggle();

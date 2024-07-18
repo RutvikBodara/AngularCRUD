@@ -9,9 +9,9 @@
                 New List
             </span>
         </div>
-        <mat-accordion>
+        <mat-accordion cdkDropList (cdkDropListDropped)="drop($event)">
             <ng-container *ngFor="let object of dataSource; let index=index">
-                <mat-expansion-panel [expanded]="currentIndex === index" (opened)="setStep(index)">
+                <mat-expansion-panel [expanded]="currentIndex === index" (opened)="setStep(index)" cdkDrag>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
                             <ng-container *ngIf="editedRowIndex !== index; else contactType">

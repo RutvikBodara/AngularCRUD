@@ -18,15 +18,19 @@ import { FormsModule } from '@angular/forms';
 import { stringify } from 'querystring';
 import { APIURL } from '../../../environment/redirection';
 import { CommonService } from '../../../services/common.service';
+// import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
+import {DragDropModule , CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 @Component({
   selector: 'app-contactlist',
   standalone: true,
-  imports: [MatTableModule,MatMenuModule,MatIconModule,CommonModule,FormsModule,MatButtonModule,MatDividerModule],
+  imports: [DragDropModule,MatTableModule,MatMenuModule,MatIconModule,CommonModule,FormsModule,MatButtonModule,MatDividerModule],
   templateUrl: './contactlist.component.html',
   styleUrl: './contactlist.component.css'
 })
 export class ContactlistComponent {
 
+  
   constructor(private commonService :CommonService,private componentServices:ComponentService,private _snackBar: MatSnackBar){}
   @Input()
   dataSource :responseData<string>[];
@@ -66,7 +70,10 @@ export class ContactlistComponent {
   // onRowClick(row:result<string>){
   //   console.log(row)
   // }
- 
+  drop(event: CdkDragDrop<any[]>) {
+    // const previousIndex = this.dataSource.findIndex((d) => d === event.item.data);
+    moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
+  }
   getContact(){
     this.componentServices.get<string>(APIURL.getContact,this.name,this.surname,this.id,this.contactList).subscribe(
       (result:result<string>)=>{
@@ -104,6 +111,9 @@ export class ContactlistComponent {
         else if(result.code == 106){
           this.errorMessage ="You Are Not Authorized To Do This Action"
         }
+        else if(result.code == 107){
+          this.commonService.showSnackBar("this contact have already exists")
+        }  
         else{
           this.getContact()
           this.commonService.showSnackBar("Updated record successfully")

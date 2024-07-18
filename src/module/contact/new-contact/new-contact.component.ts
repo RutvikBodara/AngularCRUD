@@ -58,6 +58,9 @@ export class NewContactComponent {
                 this.authorized=false;
                 this.errorMessage ="You Are Not Authorized To Do This Action"
           }
+          else if(result.code == 107){
+            this.commonService.showSnackBar("This Contact Already Exists")
+          }
           else{
             this.commonService.showSnackBar("Add Contact successfully")
             this.router.navigate(['']);

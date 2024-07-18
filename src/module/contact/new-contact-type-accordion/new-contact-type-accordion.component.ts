@@ -18,13 +18,13 @@ import { APIURL } from '../../../environment/redirection';
 import { NewContactTypeComponent } from '../new-contact-type/new-contact-type.component';
 import { CommonService } from '../../../services/common.service';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { error } from 'console';
+import {DragDropModule , CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Component({
   selector: 'app-new-contact-type-accordion',
   standalone: true,
-  imports: [MatMenuModule,MatExpansionModule,MatIconModule,CommonModule,FormsModule,MatButtonModule],
+  imports: [DragDropModule, MatMenuModule,MatExpansionModule,MatIconModule,CommonModule,FormsModule,MatButtonModule],
   templateUrl: './new-contact-type-accordion.component.html',
   styleUrl: './new-contact-type-accordion.component.css'
 })
@@ -39,7 +39,7 @@ export class NewContactTypeAccordionComponent {
   currentIndex = 0;
   countrow:number;
   errorMessage:String = "No Data Found";
-
+  
   ngOnInit(){
     // this.getContactType()
     this.commonService.updatePage("Contact Type")
@@ -67,13 +67,14 @@ export class NewContactTypeAccordionComponent {
     }
   
   );
-
     this.commonService.searchContactType$.subscribe((value:string)=>{
       this.contactList=value
       this.getContactType()
     })
 
   }
+
+
   // ngOnChange(){
   //   this.getContactType()
   // }
@@ -108,6 +109,11 @@ export class NewContactTypeAccordionComponent {
     )
   }
 
+  drop(event: CdkDragDrop<any[]>) {
+    // const previousIndex = this.dataSource.findIndex((d) => d === event.item.data);
+    moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
+  }
+  
   startEdit(row: responseData<string>, index: number) {
     console.log(index)
     this.editedRowIndex = index;
@@ -119,10 +125,13 @@ export class NewContactTypeAccordionComponent {
   }
 
   editContact(row:responseData<string>) {
-    this.componentServices.update(row,APIURL.editContactType).subscribe(
+    this.componentServices.update<string>(row,APIURL.editContactType).subscribe(
       (result:result<string>)=>{
         if(result.code === 102){
           this.commonService.showSnackBar("invalid data")
+        }
+        else if (result.code == 107){
+          this.commonService.showSnackBar("list is already exist")
         }
         else{
           this.getContactType()

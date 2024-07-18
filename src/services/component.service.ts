@@ -4,6 +4,7 @@ import { responseData, result } from '../interface/result';
 import { contact, webAPIURL } from '../environment/commonValues';
 import { APIURL } from '../environment/redirection';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,7 +21,7 @@ export class ComponentService {
     surname?:T,
     id?:number,
     typeList?:string
-  )
+  ):Observable<any>
   {
     let parameters =new HttpParams()
     
@@ -36,7 +37,9 @@ export class ComponentService {
     if(typeList){
       parameters= parameters.set('typeList',typeList)
     }
-    return this.http.get<result<T>>(webAPIURL + suburl,{params:parameters})
+    console.log(suburl)
+    console.log("entere")
+    return this.http.get<result<T>>(suburl,{params:parameters})
   }
 
   delete<T>(id:number,suburl:string){
@@ -45,19 +48,19 @@ export class ComponentService {
       parameters=parameters.set("id",id)
     }
     console.log(parameters)
-    return this.http.delete<result<T>>(webAPIURL + suburl,{params:parameters})
+    return this.http.delete<result<T>>(suburl,{params:parameters})
   }
   update<T>(data:responseData<T>,suburl:string){
     console.log(data);
     console.log("dsfa")
-    return this.http.patch<result<T>>(webAPIURL+suburl,data)
+    return this.http.patch<result<T>>(suburl,data)
   }
   // updateContactType<T>(data:responseData<T>){
   //   return this.http.patch<result<T>>(webAPIURL +APIURL.editContactType,data)
   // }
-  add<T>(data:responseData<T>,suburl:string){
+  add<T>(data:responseData<T>,suburl:string):Observable<any>{
     console.log(suburl);
-    return this.http.post<result<T>>(webAPIURL+suburl,data)
+    return this.http.post<result<T>>(suburl,data)
   }
 
   // getContactsType<T>

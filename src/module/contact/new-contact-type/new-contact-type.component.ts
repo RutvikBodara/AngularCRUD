@@ -50,17 +50,23 @@ export class NewContactTypeComponent {
 
       this.componentServices.add<string>(this.requestValue,APIURL.AddContactType).subscribe(
         (result)=>{
-          this.commonService.showSnackBar("Add Contact List successfully")
-          this.dialogRef.close()
-          const currentUrl = this.router.url;
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-               this.router.navigate([currentUrl]);
-          });
-          // this.router.getCurrentNavigation();
+          if(result.code == 107){
+            this.commonService.showSnackBar("Contact List Already Exists")
+          }
+          else{
+
+            this.commonService.showSnackBar("Add Contact List successfully")
+            this.dialogRef.close()
+            const currentUrl = this.router.url;
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate([currentUrl]);
+            });
+          }
+            // this.router.getCurrentNavigation();
         },
-        (error)=>{
-          console.log(error)
-        }
+          (error)=>{
+            console.log(error)
+          }
       )
     } 
   }
