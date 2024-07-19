@@ -1,6 +1,6 @@
 
 import { Injectable, QueryList } from '@angular/core';
-import { responseData, result } from '../interface/result';
+import { genericResponeDemo, responseData, result } from '../interface/result';
 import { contact, webAPIURL } from '../environment/commonValues';
 import { APIURL } from '../environment/redirection';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
@@ -63,6 +63,10 @@ export class ComponentService {
     return this.http.post<result<T>>(suburl,data)
   }
 
+  login<T>(data,suburl:string){
+    return this.http.post<genericResponeDemo<T>>(suburl,data)
+  }
+  
   // getContactsType<T>
   // (
   //   name?:string ,id?:number

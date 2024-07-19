@@ -9,3 +9,20 @@ export class responseData<T>{
     surname:T;
     count?:number
 }
+export class genericResponeDemo<T>{
+    code:number
+    message:string
+    responseData:T
+}
+
+export class LoginDataResponse<T>{
+    UserName:T
+    MobileNumber:number
+    JWTToken:T
+    AccountId:number
+    EmailId:T
+}
+export class LoginDataRequest<T>{
+    UserName :  T
+    Password:T
+}

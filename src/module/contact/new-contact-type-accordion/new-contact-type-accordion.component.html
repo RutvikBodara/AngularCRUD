@@ -1,7 +1,6 @@
 <ng-container *ngIf="countrow != 0; else dataNotFound">
-
     <div class="p-4" aria-colspan="accordiondiv">
-        <div (click)="openDialog('0ms', '0ms')" class="contact-feature-btn gap-2  mb-4">
+        <div matTooltip="wanna create new list? click here" (click)="openDialog('0ms', '0ms')" class="contact-feature-btn gap-2  mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="" class="bi bi-plus-lg" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
             </svg>
@@ -28,17 +27,17 @@
                         </mat-panel-description>
                     </mat-expansion-panel-header>
                     <ng-container  *ngIf="editedRowIndex !== index; else editBtn">
-                        <button class="btn btn-primary me-3" (click)="startEdit(object,index)">
+                        <button class="btn btn-primary me-3" matTooltip="edit {{object.name}} list" (click)="startEdit(object,index)">
                             <mat-icon>edit</mat-icon>
                             <span>Edit</span>
                         </button>
-                        <button  class="btn btn-danger"  (click)="deleteContact(object)">
+                        <button  class="btn btn-danger" matTooltip="delete {{object.name}} list"  (click)="deleteContact(object)">
                             <mat-icon>delete</mat-icon>
                             <span>Delete</span>
                         </button>
                     </ng-container>
                     <ng-template #editBtn>
-                        <button class="btn btn-success" (click)="editContact(object)">save</button>
+                        <button class="btn btn-success" matTooltip="save list" (click)="editContact(object)">save</button>
                         <button class="btn btn-light" (click)="cancelEdit()">Cancel</button>
                     </ng-template>
                     <mat-action-row>

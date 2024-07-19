@@ -33,4 +33,11 @@ export class CommonService{
   showSnackBar(value :string){
     this._snackBar.open(value,"close",{duration:3000})
   }
+  setLocal(value:string , name :string):void{
+    localStorage.setItem(name,value);
+  }
+  getLocal(name:string):string{
+    return localStorage.getItem(name);
+  }
+
 }

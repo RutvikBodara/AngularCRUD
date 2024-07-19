@@ -1,2 +1,7 @@
-<p>auth works!</p>
-<router-outlet></router-outlet>
+    <div class="stars">
+        <ng-container *ngFor="let i of ('a,'.repeat(50).split(','))">
+            <div class="star"></div>
+        </ng-container>
+    </div>
+    <router-outlet></router-outlet>
+    

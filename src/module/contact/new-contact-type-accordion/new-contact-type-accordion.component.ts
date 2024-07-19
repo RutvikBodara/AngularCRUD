@@ -19,12 +19,12 @@ import { NewContactTypeComponent } from '../new-contact-type/new-contact-type.co
 import { CommonService } from '../../../services/common.service';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {DragDropModule , CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-new-contact-type-accordion',
   standalone: true,
-  imports: [DragDropModule, MatMenuModule,MatExpansionModule,MatIconModule,CommonModule,FormsModule,MatButtonModule],
+  imports: [MatTooltipModule,DragDropModule, MatMenuModule,MatExpansionModule,MatIconModule,CommonModule,FormsModule,MatButtonModule],
   templateUrl: './new-contact-type-accordion.component.html',
   styleUrl: './new-contact-type-accordion.component.css'
 })
@@ -109,11 +109,13 @@ export class NewContactTypeAccordionComponent {
     )
   }
 
+  
+
   drop(event: CdkDragDrop<any[]>) {
     // const previousIndex = this.dataSource.findIndex((d) => d === event.item.data);
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
   }
-  
+
   startEdit(row: responseData<string>, index: number) {
     console.log(index)
     this.editedRowIndex = index;

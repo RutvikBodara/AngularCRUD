@@ -1,1 +1,28 @@
-<p>login works!</p>
+<ng-container class="row w-100 ">
+        <div class="text-center  col-12 col-lg-3 loginDiv">
+            <h2>Login</h2>
+            <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+                <mat-form-field class="m-3" >
+                    <mat-label>username</mat-label>
+                    <input matInput formControlName="username" placeholder="username">
+                    <mat-error *ngIf="contactForm.get('username').hasError('required')">
+                        Username is required
+                    </mat-error>
+                </mat-form-field>
+                <br>
+                <mat-form-field class="m-3" >
+                    <mat-label>password</mat-label>
+                    <input matInput formControlName="password" placeholder="password">
+                    <mat-error *ngIf="contactForm.get('password').hasError('required')">
+                        Last name is required
+                    </mat-error>
+                    <mat-error *ngIf="contactForm.get('password').hasError('minlength')">
+                        Minimum 3 characters required
+                    </mat-error>
+                </mat-form-field>
+
+                <br>
+                <button mat-fab extended type="submit" [disabled]="contactForm.invalid">Submit</button>
+            </form>
+        </div>
+</ng-container>

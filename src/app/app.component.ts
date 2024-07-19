@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Route, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ContactComponent } from './contact/contact.component';
 import { CommonModule } from '@angular/common';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
@@ -22,19 +22,25 @@ import { animate, keyframes, style, transition, trigger } from '@angular/animati
 
       // ]),
       transition(":leave",[
-        animate('1s',style({opacity:0}))
+        animate('0.05s',style({opacity:0}))
       ])
     ])
-
   ]
 })
 export class AppComponent {
+  constructor(private router :Router){}
   title = 'CrudAngular';
+  login:boolean=true;
   calls :{
     top:number
     left:number
   }[] =[];
 
+  ngOnInit(){
+    if(!this.login){
+      this.router.navigate(['auth'])
+    }
+  }
   addCallAnimation(event :MouseEvent):void{
     console.log(event.clientY +"  " + event.clientX)
     const newCall ={top:event.clientY, left:event.clientX}
@@ -45,6 +51,6 @@ export class AppComponent {
       if (index !== -1) {
         this.calls.splice(index, 1);
       }
-    },5000);
+    },50);
   }
 }

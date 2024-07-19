@@ -7,4 +7,5 @@ export const  APIURL = {
     editContactType:"contacts/updatecontactstype",
     AddContact:"contacts/addcontacts",
     AddContactType:"contacts/addcontactstype",
+    login:"login"
 }

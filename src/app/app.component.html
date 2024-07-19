@@ -3,9 +3,11 @@
   <mat-icon>home</mat-icon>
   Home
 </button> -->
-<div (click)="addCallAnimation($event)">
-  <div *ngFor="let call of calls; let index=index" class="call" [style.top.px]="call.top" [style.left.px]="call.left"  [@fadeoutanimation]="index">&#9733;</div>
-  <router-outlet>
-  </router-outlet>
 
+<div (mousemove)="addCallAnimation($event)" class="maindiv" [ngClass]="{'changeColor' : !login}">
+  <ng-container *ngIf="login">
+    <div *ngFor="let call of calls; let index=index" class="call" [style.top.px]="call.top" [style.left.px]="call.left"  [@fadeoutanimation]="index">&#9733;</div>
+  </ng-container>
+   <router-outlet>
+  </router-outlet>
 </div>
