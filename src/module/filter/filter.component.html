@@ -8,7 +8,7 @@
     </div>
      
     <div class="d-flex gap-3">
-        <mat-form-field appearance="outline" >
+        <mat-form-field appearance="outline"  [hidden]="checkPage">
             <mat-label>search in {{currentPage.toLowerCase()}}</mat-label>
             <mat-select [formControl]="contactTypes" multiple>
                 <!-- <mat-select-trigger>
@@ -22,7 +22,7 @@
                     <ng-container *ngFor="let object of contactTypeList">
                         <mat-option [value]="object.id">{{object.name}}</mat-option>
                     </ng-container>
-                </mat-select>
+            </mat-select>
         </mat-form-field>
 
     

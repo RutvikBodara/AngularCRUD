@@ -1,0 +1,99 @@
+
+<div class="p-3 mt-3" style="background-color: #fffcf0 ; border-radius: 25px;">
+    <h2>Edit Product Details:</h2>
+    <form class="row" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="col-6 mt-3">
+            <mat-label>Product Name</mat-label>
+            <input matInput formControlName="name">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="col-6 mt-3">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-6 mt-3">
+            <mat-label>Helpline Number</mat-label>
+            <input matInput formControlName="helplineNumber">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-6 mt-3">
+            <mat-label>Product Price</mat-label>
+            <input matInput type="number" class="example-right-align" placeholder="0"  formControlName="price"/>
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+        <mat-form-field appearance="outline" class="col-6 mt-3">
+            <mat-label>Launch Date Of Product</mat-label>
+            <input  matInput [matDatepicker]="picker1" formControlName="launchDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-6 mt-3">
+            <mat-label>Available till*</mat-label>
+            <input  matInput [matDatepicker]="picker2" formControlName="lastDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-6 mt-3">
+            <mat-label>category</mat-label>
+            <mat-select formControlName="categoryId">
+                <ng-container *ngFor="let category of categories">
+                    <mat-option value="{{category.id}}">{{category.name}}</mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+        <div class="col-6 mt-3"></div>
+
+        <h2>Regional & Sell Details</h2>
+        <div class="col-6 mt-3">
+            <label>Available for sale: </label>
+            <mat-radio-group formControlName="availableForSale">
+              <mat-radio-button value="true">Yes</mat-radio-button>
+              <mat-radio-button value="false">No</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <section class="col-6 mt-3 d-flex" >
+            <span class="example-list-section">
+              <mat-checkbox
+                [checked]="task().completed"
+                (change)="update($event.checked)"
+        
+              >
+                {{task().name}}
+              </mat-checkbox>
+            </span>
+            <br>
+            <span class="example-list-section">
+              <div class="d-flex">
+                @for (subtask of task().subtasks; track subtask; let i = $index) {
+                  <div>
+                    <mat-checkbox [checked]="subtask.completed" (change)="update($event.checked, i)">
+                      {{subtask.name}}
+                    </mat-checkbox>
+                </div>
+                }
+            </div>
+            </span>
+        </section>
+
+        <div  class="col-12 mt-3">
+            <input type="file" id="fileInput" (change)="onFileChange($event)" hidden #fileInput formControlName="file">
+            <!-- <input matInput placeholder="" readonly> --> 
+            <span class="text-end"><button class="btn btn-warning" type="button" (click)="fileInput.click()">upload product photo</button></span>
+            <span class="ms-3 me-3">{{filename}}</span>
+            <span><button *ngIf="filename" class="btn btn-danger" (click)="removefile()">remove file</button></span>
+        </div>
+        
+        <div class="col-12 d-flex justify-content-center p-3">
+            <img [src]="url" width="250px" height="250px" [hidden]="url == undefined" >
+        </div>
+        <!-- <span class="d-flex justify-content-center">
+            <img src="data:image/jpeg;base64,{{currentProduct.image }}" height="250px" width="250px">
+        </span> -->
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+    </form>
+</div>

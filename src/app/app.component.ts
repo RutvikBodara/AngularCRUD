@@ -42,7 +42,6 @@ export class AppComponent {
     }
   }
   addCallAnimation(event :MouseEvent):void{
-    console.log(event.clientY +"  " + event.clientX)
     const newCall ={top:event.clientY, left:event.clientX}
     this.calls.push(newCall);
 

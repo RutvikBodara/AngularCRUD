@@ -74,7 +74,6 @@ export class NewContactTypeAccordionComponent {
 
   }
 
-
   // ngOnChange(){
   //   this.getContactType()
   // }
@@ -108,8 +107,6 @@ export class NewContactTypeAccordionComponent {
       }
     )
   }
-
-  
 
   drop(event: CdkDragDrop<any[]>) {
     // const previousIndex = this.dataSource.findIndex((d) => d === event.item.data);

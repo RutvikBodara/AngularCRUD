@@ -1,11 +1,20 @@
 export const  APIURL = {
     getContact:"contacts/getcontacts",
     getContactType:"contacts/getcontactstype",
+    getProduct:"product/getproducts",
+    getCategory:"category/getCategory",
     deleteContact:"contacts/deletecontacts",
     deleteContacttype:"contacts/deletecontactstype",
+    deleteProduct:"product/deleteproduct",
+    deleteCategory:"category/deletecategory",
     editContact:"contacts/updatecontacts",
     editContactType:"contacts/updatecontactstype",
+    editCategory:"category/updatecategory",
+    editProduct:"product/updateproduct",
     AddContact:"contacts/addcontacts",
     AddContactType:"contacts/addcontactstype",
-    login:"login"
+    AddProduct:"product/addproduct",
+    AddCategory:"category/addcategory",
+    login:"login",
+    getCountry:'common/getcountries'
 }

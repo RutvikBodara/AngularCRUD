@@ -5,11 +5,16 @@ import {
   MatSnackBar,
 } from '@angular/material/snack-bar';
 import { ThisReceiver } from '@angular/compiler';
+import { product } from '../interface/result';
+import { Router } from '@angular/router';
+import { category } from '../interface/common';
 
 @Injectable({
   providedIn: 'root'
+  
 })
 export class CommonService{
+
   private searchValue:BehaviorSubject<string | number> = new BehaviorSubject<string |number>(null);
   searchstring$ = this.searchValue.asObservable()
 
@@ -19,7 +24,14 @@ export class CommonService{
   private serchContactType :BehaviorSubject<string> = new BehaviorSubject<string>(null);
   searchContactType$ = this.serchContactType.asObservable()
 
-  constructor(private _snackBar:MatSnackBar) { }
+  private productDetails :BehaviorSubject<product> = new BehaviorSubject<product>(null);
+  product$ = this.productDetails.asObservable()
+  
+  private categoryDetails :BehaviorSubject<category> = new BehaviorSubject<category>(null);
+  categoryDetails$ = this.categoryDetails.asObservable()
+
+
+  constructor(private _snackBar:MatSnackBar,private router:Router) { }
   updatesearch(value: number |string){
       this.searchValue.next(value)
   }
@@ -28,6 +40,12 @@ export class CommonService{
   }
   updateSearchContactList(value : string){
     this.serchContactType.next(value)
+  }
+  updateProductDetails(prod:product){
+    this.productDetails.next(prod)
+  }
+  updateCategory(cat:category){
+    this.categoryDetails.next(cat)
   }
 
   showSnackBar(value :string){
@@ -40,4 +58,10 @@ export class CommonService{
     return localStorage.getItem(name);
   }
 
+  navigateOnSamePage(){
+    const currentUrl = this.router.url;
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate([currentUrl]);
+            });
+  }
 }

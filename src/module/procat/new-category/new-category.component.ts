@@ -21,41 +21,37 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
 @Component({
-  selector: 'app-new-contact-type',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule,MatInputModule,MatFormFieldModule,MatIconModule,MatDividerModule,MatButtonModule],
+  selector: 'app-new-category',
   standalone: true,
-  templateUrl: './new-contact-type.component.html',
-  styleUrl: './new-contact-type.component.css'
+  imports: [CommonModule, FormsModule, ReactiveFormsModule,MatInputModule,MatFormFieldModule,MatIconModule,MatDividerModule,MatButtonModule],
+  templateUrl: './new-category.component.html',
+  styleUrl: './new-category.component.css'
 })
-export class NewContactTypeComponent {
-  constructor(private commonService :CommonService,private router:Router,private dialogRef: MatDialogRef<NewContactTypeComponent>,private formbuilderinstance:FormBuilder ,private componentServices:ComponentService,private _snackBar:MatSnackBar){}
-  contactTypeForm: FormGroup;
+export class NewCategoryComponent {
+  constructor(private commonService :CommonService,private router:Router,private dialogRef: MatDialogRef<NewCategoryComponent>,private formbuilderinstance:FormBuilder ,private componentServices:ComponentService,private _snackBar:MatSnackBar){}
+  CategoryForm: FormGroup;
   requestValue:responseData<string>
   ngOnInit(){
-    this.contactTypeForm =this.formbuilderinstance.group({
+    this.CategoryForm =this.formbuilderinstance.group({
       name:['',[Validators.required]]
     });
   }
   onSubmit(){
-
-    if(this.contactTypeForm.valid){
-      const formValue = this.contactTypeForm.value;
+    if(this.CategoryForm.valid){
+      const formValue = this.CategoryForm.value;
       // const jsonString = JSON.stringify(value);
       this.requestValue = {
         id:null,
         name:formValue.name,
         surname:null
       }
-
-
-      this.componentServices.add<string>(this.requestValue,APIURL.AddContactType).subscribe(
+      this.componentServices.add<string>(this.requestValue,APIURL.AddCategory).subscribe(
         (result)=>{
           if(result.code == 107){
-            this.commonService.showSnackBar("Contact List Already Exists")
+            this.commonService.showSnackBar("Category Already Exists")
           }
           else{
-
-            this.commonService.showSnackBar("Add Contact List successfully")
+            this.commonService.showSnackBar("Add category successfully")
             this.dialogRef.close()
             this.commonService.navigateOnSamePage()
           }

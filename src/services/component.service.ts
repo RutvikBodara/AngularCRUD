@@ -1,9 +1,9 @@
 
 import { Injectable, QueryList } from '@angular/core';
-import { genericResponeDemo, responseData, result } from '../interface/result';
+import { genericResponeDemo, product, productEdit, responseData, result } from '../interface/result';
 import { contact, webAPIURL } from '../environment/commonValues';
 import { APIURL } from '../environment/redirection';
-import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
@@ -37,9 +37,8 @@ export class ComponentService {
     if(typeList){
       parameters= parameters.set('typeList',typeList)
     }
-    console.log(suburl)
-    console.log("entere")
-    return this.http.get<result<T>>(suburl,{params:parameters})
+
+    return this.http.get(suburl,{params:parameters})
   }
 
   delete<T>(id:number,suburl:string){
@@ -51,9 +50,10 @@ export class ComponentService {
     return this.http.delete<result<T>>(suburl,{params:parameters})
   }
   update<T>(data:responseData<T>,suburl:string){
-    console.log(data);
-    console.log("dsfa")
     return this.http.patch<result<T>>(suburl,data)
+  }
+  updateProduct<T>(data:productEdit,suburl:string){
+    return this.http.patch<result<T>>(suburl,data);
   }
   // updateContactType<T>(data:responseData<T>){
   //   return this.http.patch<result<T>>(webAPIURL +APIURL.editContactType,data)

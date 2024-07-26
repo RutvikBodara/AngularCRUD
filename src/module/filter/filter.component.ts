@@ -12,6 +12,7 @@ import { APIURL } from '../../environment/redirection';
 import {MatSelectModule} from '@angular/material/select';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { constrainedMemory } from 'process';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class FilterComponent {
   contactTypes = new FormControl('');
   currentPage:string;
   contactTypeList:responseData<string>[]
+  checkPage:boolean =false;
   @Output()
   sideBarToggle :EventEmitter<boolean> = new EventEmitter<boolean>(true)
   
@@ -37,6 +39,15 @@ export class FilterComponent {
 
     this.commonService.currentPage$.subscribe((value)=>{
       this.currentPage=value
+      console.log(value);
+      console.log("fuhsd")
+      if(value == "Products" || value == "Category"){
+        this.checkPage =true
+      }
+      else{
+        this.checkPage=false;
+        
+      }
     })
     
     this.componentService.get<string>(APIURL.getContactType).subscribe(

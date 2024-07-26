@@ -1,0 +1,19 @@
+.contact-feature-btn {
+    font: 20px Arial;
+    display: inline-block;
+    padding: 1em 1em;
+    text-align: left;
+    color: black;
+    border-radius: 25px;
+
+    /* "to left" / "to right" - affects initial color */
+    background: linear-gradient(to left,  #ffdf6b 50%, #faca1f 50%) right;
+    background-size: 200%;
+    transition: .5s ease-out;
+}
+.contact-feature-btn:hover {
+    background-position: left;
+}
+.green-cell{
+    background-color: rgb(31, 237, 31) !important;
+}
