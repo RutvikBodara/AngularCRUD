@@ -13,6 +13,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { constrainedMemory } from 'process';
+import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 
 
 @Component({
@@ -66,8 +67,15 @@ export class FilterComponent {
   // @Output()
   // searchValue :EventEmitter<string> = new EventEmitter<string>();
 
-  searched(){
-    // this.searchValue.emit(this.searchString.nativeElement.value);
+  ngAfterViewInit(){
+    fromEvent<any>(this.searchString.nativeElement ,'keyup').pipe(
+      map(data => data.target.value),
+      //debounce example
+      debounceTime(1000),
+      //distinct untilchnage
+      distinctUntilChanged()
+    ).subscribe((res)=>{
+      
     const searchId = Number(this.searchString.nativeElement.value)
     if(!isNaN(searchId)){
       this.commonService.updatesearch(searchId)
@@ -75,9 +83,20 @@ export class FilterComponent {
     else{
       this.commonService.updatesearch(this.searchString.nativeElement.value)
     }
-    console.log(this.contactTypes)
-    //select search
+    })
   }
+
+  // searched(){
+  //   // this.searchValue.emit(this.searchString.nativeElement.value);
+  //   const searchId = Number(this.searchString.nativeElement.value)
+  //   if(!isNaN(searchId)){
+  //     this.commonService.updatesearch(searchId)
+  //   }
+  //   else{
+  //     this.commonService.updatesearch(this.searchString.nativeElement.value)
+  //   }
+  //   //select search
+  // }
 
   updatedSearchList(){
     // let contactTypeList :number[] = this.contactTypes.value.split(',').map(number)

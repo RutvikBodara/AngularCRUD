@@ -4,7 +4,8 @@ import { genericResponeDemo, product, productEdit, responseData, result } from '
 import { contact, webAPIURL } from '../environment/commonValues';
 import { APIURL } from '../environment/redirection';
 import { HttpClient, HttpClientModule, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { delay, Observable, retryWhen, scan } from 'rxjs';
+import { error } from 'node:console';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,7 +21,8 @@ export class ComponentService {
     name?:T,
     surname?:T,
     id?:number,
-    typeList?:string
+    typeList?:string,
+    commonsearch?
   ):Observable<any>
   {
     let parameters =new HttpParams()
@@ -36,6 +38,9 @@ export class ComponentService {
     }
     if(typeList){
       parameters= parameters.set('typeList',typeList)
+    }
+    if(commonsearch){
+      parameters =parameters.set('commonsearch',commonsearch)
     }
 
     return this.http.get(suburl,{params:parameters})

@@ -21,7 +21,7 @@ import { MatDialog } from "@angular/material/dialog";
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css'
 import 'ag-grid-enterprise'
-import { fromEvent } from 'rxjs';
+import { delay, fromEvent, retryWhen, scan } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ActionMenuComponent } from './action-menu/action-menu.component';
@@ -37,7 +37,7 @@ export class ProductComponent {
   constructor(private router: Router ,private commonService :CommonService,private componentServices:ComponentService,private _snackBar: MatSnackBar){}
   @Input()
   dataSource;
-  name:string ="";
+  commonSearch;
   id:number=undefined;
   errorMessage:String = "No Data Found";
   pagination:boolean=true;
@@ -89,27 +89,25 @@ export class ProductComponent {
     // this.getContact()
     this.commonService.updatePage("Products")
     this.commonService.searchstring$.subscribe((value:number|string)=>{
-      if(typeof value === 'number'){
-        if(value !== 0){
-          this.id=value
-        }
-        else{
-          //default
-          this.id=undefined
-          this.name=""
-        }
-      }
-      else{
-        this.name =value
-      }
-      this.getProduct()
+        this.commonSearch =value
+        console.log(this.commonSearch)
+        console.log("hey i am here")
+        this.getProduct()
     });
    
   }
   displayedColumns: string[] = ['Id', 'Name', 'Surname', 'Action'];
 
   getProduct(){
-    this.componentServices.get<string>(APIURL.getProduct).subscribe(
+    this.componentServices.get<string>(APIURL.getProduct,null,null,null,null,this.commonSearch).pipe(retryWhen(arr => arr.pipe(delay(5000), scan(retrycount =>{
+      if(retrycount > 20){
+        throw arr;
+      }
+      else{
+        
+        console.log("try to retrieve data")
+      }
+    })))).subscribe(
       (result:result<string>)=>{
         if(result.code == 106){
           this.errorMessage ="You Are Not Authorized To Do This Action"

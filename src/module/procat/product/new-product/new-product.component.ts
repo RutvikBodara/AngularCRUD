@@ -18,6 +18,7 @@ import { category, Task } from '../../../../interface/common';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { UndoRedoEditModule } from 'ag-grid-community/dist/types/core/edit/editModule';
+import { lstat } from 'node:fs';
 
 @Component({
   selector: 'app-new-product',
@@ -177,6 +178,11 @@ export class NewProductComponent {
     if(this.productForm.valid){
       const data = this.productForm.value;
       // console.log(data)
+
+      if(data.lastDate < data.launchDate){
+        this.commonService.showSnackBar("last date must be grater than launch date")
+        return false;
+      }
       const formData = new FormData();
       Object.keys(this.productForm.controls).forEach(key => {
         if(key != "launchDate" && key != "lastDate" && key != "countries"){
@@ -217,9 +223,9 @@ export class NewProductComponent {
       //   categoryId:data.categoryId,
       //   file:data.file
       // }
-     
       this.addProduct(formData);
     }
+    return true;
   }
 
   addProduct(data){
@@ -231,7 +237,7 @@ export class NewProductComponent {
       this.router.navigate(['/contact/product'])
      }
      else{
-      this.commonService.showSnackBar(data.message)
+      this.commonService.showSnackBar(res.message)
      }
     });
   }

@@ -59,12 +59,12 @@ export class ContactlistComponent {
       else{
         this.name =value
       }
-      this.getContact()
+      // this.getContact()
     });
     this.commonService.searchContactType$.subscribe((value:string)=>{
       this.contactList=value
-      this.getContact()
     })
+    this.getContact()
   }
   displayedColumns: string[] = ['Id', 'Name', 'Surname', 'Action'];
   // onRowClick(row:result<string>){

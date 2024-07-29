@@ -241,8 +241,10 @@ export class ManipulateProductComponent {
         this.selectedCountry.push(checkedSubtasks[i].id)
       }
     }
-    
-    console.log(this.file)
+    if(data.lastDate < data.launchDate){
+      this.commonService.showSnackBar("last date must be greater than launch date")
+      return false;
+    }
     if(this.productForm.valid){
 
       const base64File:string=this.file? await this.getBase64(this.file) : null;
@@ -263,6 +265,7 @@ export class ManipulateProductComponent {
       console.log(this.requestData)
       this.postEditProduct()
     }
+    return true;
   }
   
   postEditProduct(){

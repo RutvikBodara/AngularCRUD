@@ -21,6 +21,7 @@ import { ActionMenuComponent } from "./action-menu/action-menu.component";
 })
 export class CategoryComponent {
   pagination:boolean=true;
+  commonSearch;
   paginationPageSize:number= 10;
   paginationPageSizeSelector = [1,10,20,50,100,200]
   resizeColumn :ColDef={
@@ -65,27 +66,10 @@ export class CategoryComponent {
   ngOnInit(){
     // this.getContact()
     this.commonService.updatePage("Category")
-    // this.commonService.searchstring$.subscribe((value:number|string)=>{
-    //   if(typeof value === 'number'){
-    //     if(value !== 0){
-    //       this.id=value
-    //     }
-    //     else{
-    //       //default
-    //       this.id=undefined
-    //       this.name=""
-    //     }
-    //   }
-    //   else{
-    //     this.name =value
-    //   }
-    //   this.getContact()
-    // });
-    // this.commonService.searchContactType$.subscribe((value:string)=>{
-    //   this.contactList=value
-    //   this.getContact()
-    // })
-    this.getCategory()
+    this.commonService.searchstring$.subscribe((value:number|string)=>{
+        this.commonSearch = value
+      this.getCategory()
+    });
   }
   // announceSortChange(sortState: Sort) {
   //   if (sortState.direction) {
@@ -106,7 +90,7 @@ export class CategoryComponent {
 
 
   getCategory(){
-    this.componentServices.get<string>(APIURL.getCategory).subscribe(
+    this.componentServices.get<string>(APIURL.getCategory,null,null,null,null,this.commonSearch).subscribe(
       (result:result<string>)=>{
         if(result.code == 106){
           this.errorMessage ="You Are Not Authorized To Do This Action"
