@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { equal } from 'assert';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 import {
   MatSnackBar,
 } from '@angular/material/snack-bar';
@@ -18,6 +18,14 @@ export class CommonService{
   private searchValue:BehaviorSubject<string | number> = new BehaviorSubject<string |number>(null);
   searchstring$ = this.searchValue.asObservable()
 
+  
+  // private searchValue:AsyncSubject<string|number> = new AsyncSubject<string|number>();
+  // searchstring$ = this.searchValue.asObservable()
+  //subject example
+  // private demoSubject : Subject<string> = new Subject();
+
+  //replay subject
+
   private currentPage:BehaviorSubject<string> = new BehaviorSubject<string>('DashBoard');
   currentPage$ = this.currentPage.asObservable()
 
@@ -31,9 +39,13 @@ export class CommonService{
   categoryDetails$ = this.categoryDetails.asObservable()
 
 
+
   constructor(private _snackBar:MatSnackBar,private router:Router) { }
   updatesearch(value: number |string){
       this.searchValue.next(value)
+  }
+  unSubscribeProduct(){
+    this.searchValue.unsubscribe()
   }
   updatePage(value:string){
     this.currentPage.next(value);
@@ -47,7 +59,6 @@ export class CommonService{
   updateCategory(cat:category){
     this.categoryDetails.next(cat)
   }
-
   showSnackBar(value :string){
     this._snackBar.open(value,"close",{duration:3000})
   }

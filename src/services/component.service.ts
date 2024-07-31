@@ -4,7 +4,7 @@ import { genericResponeDemo, product, productEdit, responseData, result } from '
 import { contact, webAPIURL } from '../environment/commonValues';
 import { APIURL } from '../environment/redirection';
 import { HttpClient, HttpClientModule, HttpHeaders, HttpParams } from '@angular/common/http';
-import { delay, Observable, retryWhen, scan } from 'rxjs';
+import { delay, Observable, retryWhen, scan, shareReplay } from 'rxjs';
 import { error } from 'node:console';
 @Injectable({
   providedIn: 'root'
@@ -43,7 +43,7 @@ export class ComponentService {
       parameters =parameters.set('commonsearch',commonsearch)
     }
 
-    return this.http.get(suburl,{params:parameters})
+    return this.http.get(suburl,{params:parameters}).pipe(shareReplay())
   }
 
   delete<T>(id:number,suburl:string){
@@ -52,24 +52,24 @@ export class ComponentService {
       parameters=parameters.set("id",id)
     }
     console.log(parameters)
-    return this.http.delete<result<T>>(suburl,{params:parameters})
+    return this.http.delete<result<T>>(suburl,{params:parameters}).pipe(shareReplay())
   }
   update<T>(data:responseData<T>,suburl:string){
-    return this.http.patch<result<T>>(suburl,data)
+    return this.http.patch<result<T>>(suburl,data).pipe(shareReplay())
   }
   updateProduct<T>(data:productEdit,suburl:string){
-    return this.http.patch<result<T>>(suburl,data);
+    return this.http.patch<result<T>>(suburl,data).pipe(shareReplay())
   }
   // updateContactType<T>(data:responseData<T>){
   //   return this.http.patch<result<T>>(webAPIURL +APIURL.editContactType,data)
   // }
   add<T>(data:responseData<T>,suburl:string):Observable<any>{
     console.log(suburl);
-    return this.http.post<result<T>>(suburl,data)
+    return this.http.post<result<T>>(suburl,data).pipe(shareReplay())
   }
 
   login<T>(data,suburl:string){
-    return this.http.post<genericResponeDemo<T>>(suburl,data)
+    return this.http.post<genericResponeDemo<T>>(suburl,data).pipe(shareReplay())
   }
   
   // getContactsType<T>

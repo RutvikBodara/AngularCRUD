@@ -20,6 +20,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
+import { exhaustMap, of } from 'rxjs';
 @Component({
   selector: 'app-new-category',
   standalone: true,
@@ -45,22 +46,21 @@ export class NewCategoryComponent {
         name:formValue.name,
         surname:null
       }
-      this.componentServices.add<string>(this.requestValue,APIURL.AddCategory).subscribe(
+      this.componentServices.add<string>(this.requestValue,APIURL.AddCategory).pipe(exhaustMap(
         (result)=>{
           if(result.code == 107){
-            this.commonService.showSnackBar("Category Already Exists")
+            this.commonService.showSnackBar("Category Already Exists");
+            return of(result);
           }
           else{
             this.commonService.showSnackBar("Add category successfully")
             this.dialogRef.close()
             this.commonService.navigateOnSamePage()
+            return of(result);
           }
             // this.router.getCurrentNavigation();
-        },
-          (error)=>{
-            console.log(error)
-          }
-      )
+        }
+       ) ).subscribe()
     } 
   }
 }

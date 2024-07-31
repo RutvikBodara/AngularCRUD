@@ -20,6 +20,7 @@ import { APIURL } from '../../../environment/redirection';
 import { CommonService } from '../../../services/common.service';
 // import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
 import {DragDropModule , CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-contactlist',
@@ -59,13 +60,33 @@ export class ContactlistComponent {
       else{
         this.name =value
       }
-      // this.getContact()
+      this.getContact()
     });
     this.commonService.searchContactType$.subscribe((value:string)=>{
       this.contactList=value
+      this.getContact()
     })
-    this.getContact()
   }
+
+
+    // filterContact() {
+  //   if (this.getContacts) {
+  //     console.log('All contacts:', this.getContacts);
+  //     // const surnameValue = this.surname.toLowerCase();
+  //     console.log(this.contactList)
+  //     // console.log(nameValue +" " + surnameValue + " " + idValue)
+  //     this.dataSource = this.getContacts.responseData.filter(x => {
+  //       const matchesName = !this.name || x.name.toLowerCase().includes(this.name.toLowerCase());
+  //       const matchesSurname = !this.name || x.surname.toLowerCase().includes(this.name.toLowerCase());
+  //       const matchesId = !this.id || x.id === this.id;
+  //       return ( (matchesName || matchesSurname) && matchesId);
+  //     });
+
+  //     this.dataSourceCount = this.dataSource.length;
+  //   } else {
+  //     console.log('No contacts to filter.');
+  //   }
+  // }
   displayedColumns: string[] = ['Id', 'Name', 'Surname', 'Action'];
   // onRowClick(row:result<string>){
   //   console.log(row)
@@ -75,13 +96,15 @@ export class ContactlistComponent {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
   }
   getContact(){
-    this.componentServices.get<string>(APIURL.getContact,this.name,this.surname,this.id,this.contactList).subscribe(
+    this.componentServices.get<string>(APIURL.getContact,this.name,this.surname,this.id,this.contactList).pipe(shareReplay(1)).subscribe(
       (result:result<string>)=>{
         if(result.code == 106){
           this.errorMessage ="You Are Not Authorized To Do This Action"
           this.dataSourceCount =0
         }
         else{
+          console.log("this")
+          console.log(result)
           this.dataSource =result.responseData
           this.dataSourceCount =result.responseData.length
         }

@@ -40,14 +40,11 @@ export class FilterComponent {
 
     this.commonService.currentPage$.subscribe((value)=>{
       this.currentPage=value
-      console.log(value);
-      console.log("fuhsd")
       if(value == "Products" || value == "Category"){
         this.checkPage =true
       }
       else{
         this.checkPage=false;
-        
       }
     })
     
@@ -73,7 +70,8 @@ export class FilterComponent {
       //debounce example
       debounceTime(1000),
       //distinct untilchnage
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      //switchmap
     ).subscribe((res)=>{
       
     const searchId = Number(this.searchString.nativeElement.value)

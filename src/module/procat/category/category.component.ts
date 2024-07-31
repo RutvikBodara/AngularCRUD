@@ -12,6 +12,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css'
 import 'ag-grid-enterprise'
 import { ActionMenuComponent } from "./action-menu/action-menu.component";
+import { Subscription } from "rxjs";
 @Component({
   selector: 'app-category',
   standalone: true,
@@ -22,6 +23,7 @@ import { ActionMenuComponent } from "./action-menu/action-menu.component";
 export class CategoryComponent {
   pagination:boolean=true;
   commonSearch;
+  searchStringSubscription :Subscription;
   paginationPageSize:number= 10;
   paginationPageSizeSelector = [1,10,20,50,100,200]
   resizeColumn :ColDef={
@@ -66,10 +68,13 @@ export class CategoryComponent {
   ngOnInit(){
     // this.getContact()
     this.commonService.updatePage("Category")
-    this.commonService.searchstring$.subscribe((value:number|string)=>{
+    this.searchStringSubscription = this.commonService.searchstring$.subscribe((value:number|string)=>{
         this.commonSearch = value
       this.getCategory()
     });
+  }
+  ngOnDestroy(){
+    this.searchStringSubscription.unsubscribe();
   }
   // announceSortChange(sortState: Sort) {
   //   if (sortState.direction) {
@@ -94,7 +99,6 @@ export class CategoryComponent {
       (result:result<string>)=>{
         if(result.code == 106){
           this.errorMessage ="You Are Not Authorized To Do This Action"
-        
         }
         else{
           console.log(result);

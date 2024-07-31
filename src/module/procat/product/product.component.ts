@@ -21,7 +21,7 @@ import { MatDialog } from "@angular/material/dialog";
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css'
 import 'ag-grid-enterprise'
-import { delay, fromEvent, retryWhen, scan } from 'rxjs';
+import { debounceTime, delay, distinctUntilChanged, fromEvent, retry, retryWhen, scan, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ActionMenuComponent } from './action-menu/action-menu.component';
@@ -39,9 +39,12 @@ export class ProductComponent {
   dataSource;
   commonSearch;
   id:number=undefined;
+  searchStringSubscription:Subscription;
+  getProductSubscription : Subscription;
   errorMessage:String = "No Data Found";
   pagination:boolean=true;
   paginationPageSize:number= 10;
+  retryCount : number =1;
   paginationPageSizeSelector = [1,10,20,50,100,200]
   resizeColumn :ColDef={
     filter:true,
@@ -88,26 +91,34 @@ export class ProductComponent {
   ngOnInit(){
     // this.getContact()
     this.commonService.updatePage("Products")
-    this.commonService.searchstring$.subscribe((value:number|string)=>{
+    this.searchStringSubscription = this.commonService.searchstring$.subscribe((value:number|string)=>{
         this.commonSearch =value
         console.log(this.commonSearch)
         console.log("hey i am here")
         this.getProduct()
     });
-   
+  }
+
+  ngOnDestroy(){
+    this.searchStringSubscription.unsubscribe()
   }
   displayedColumns: string[] = ['Id', 'Name', 'Surname', 'Action'];
 
+  
   getProduct(){
-    this.componentServices.get<string>(APIURL.getProduct,null,null,null,null,this.commonSearch).pipe(retryWhen(arr => arr.pipe(delay(5000), scan(retrycount =>{
-      if(retrycount > 20){
-        throw arr;
+    this.getProductSubscription = this.componentServices.get<string>(APIURL.getProduct,null,null,null,null,this.commonSearch).pipe(retryWhen(arr => arr.pipe(delay(1000), scan((retryCount) =>{
+      // retryCount = retryCount + 1;
+      // console.log(retryCount)
+      if(this.retryCount % 2 == 0){
+        this.commonService.showSnackBar("please make sure you have proper internet connection")
+        // throw arr;
       }
       else{
-        
-        console.log("try to retrieve data")
+        console.log(this.retryCount)
+        //this.getProductSubscription.unsubscribe()
       }
-    })))).subscribe(
+      this.retryCount++;
+    },0)))).subscribe(
       (result:result<string>)=>{
         if(result.code == 106){
           this.errorMessage ="You Are Not Authorized To Do This Action"
@@ -118,10 +129,7 @@ export class ProductComponent {
           //   products.image = this.blobToFile(products.image,products.imagename)
           // }
           // )
-       
           this.dataSource =result.responseData
-          console.log(result)
-          console.log("demooosooo")
         }
       },
       (error)=>{

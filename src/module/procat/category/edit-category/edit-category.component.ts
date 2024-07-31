@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { responseData } from '../../../../interface/result';
+import { catchError, delay, exhaustMap, of } from 'rxjs';
 
 @Component({
   selector: 'app-edit-category',
@@ -36,36 +37,39 @@ export class EditCategoryComponent {
     });
   }
 
-  editCategory(requestData){
-
-    console.log(this.CategoryDetails)
-    this.componentService.update<string>(this.requestData,APIURL.editCategory).subscribe(
-      (res)=>{
-        if(res.code  == 100){
-          this.commonService.showSnackBar("changes applied")
-          this.dialogRef.close()
-          this.commonService.navigateOnSamePage()
+  //exhaust map example
+  editCategory(requestData: any) {
+    console.log(this.CategoryDetails);
+    return this.componentService.update<string>(requestData, APIURL.editCategory).pipe(
+      exhaustMap(res => {
+        if (res.code == 100) {
+          this.commonService.showSnackBar('Changes applied');
+          this.dialogRef.close();
+          this.commonService.navigateOnSamePage();
+          return of(res);
+        } else {
+          this.commonService.showSnackBar(res.message);
+          return of(res);
         }
-        else{
-          this.commonService.showSnackBar(res.message)
-        }
-
-      },
-      (error)=>{
+      }),
+      catchError(error => {
         console.error(error);
-      }
-    )
-
+        this.commonService.showSnackBar('An error occurred');
+        return of(error);
+      })
+    );
   }
-  onSubmit(){
-    if(this.CategoryForm.valid){
+
+  onSubmit() {
+    if (this.CategoryForm.valid) {
       const data = this.CategoryForm.value;
       this.requestData = {
-        id:this.CategoryDetails.id,
-        name:data.name,
-        surname:null
-      }
-      this.editCategory(this.requestData)
-    } 
+        id: this.CategoryDetails.id,
+        name: data.name,
+        surname: null
+      };
+      
+      this.editCategory(this.requestData).subscribe();
+    }
   }
 }
