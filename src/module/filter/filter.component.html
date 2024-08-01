@@ -1,17 +1,23 @@
 <div class="filter-contact d-flex justify-content-between">
-
-    <div class="d-flex gap-3">
+  <div class="d-flex gap-3">
     <button mat-fab (click)="onClickToggle()">
-        <mat-icon  mat-button role="img" class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">menu</mat-icon>
+      <mat-icon
+        mat-button
+        role="img"
+        class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color"
+        aria-hidden="true"
+        data-mat-icon-type="font"
+      >
+        menu
+      </mat-icon>
     </button>
-    <h2 class="mt-2">{{currentPage}}</h2>
-    </div>
-     
-    <div class="d-flex gap-3">
-        <mat-form-field appearance="outline"  [hidden]="checkPage">
-            <mat-label>search in {{currentPage.toLowerCase()}}</mat-label>
-            <mat-select [formControl]="contactTypes" multiple>
-                <!-- <mat-select-trigger>
+    <h2 class="mt-2">{{ currentPage }}</h2>
+  </div>
+  <div class="d-flex gap-3">
+    <mat-form-field appearance="outline" [hidden]="checkPage">
+      <mat-label>search in {{ currentPage.toLowerCase() }}</mat-label>
+      <mat-select [formControl]="contactTypes" multiple>
+        <!-- <mat-select-trigger>
                     {{contactTypes.value?.[0] || ''}}
                     @if ((contactTypes.value?.length || 0) > 1) {
                         <span class="example-additional-selection">
@@ -19,18 +25,20 @@
                         </span>
                         }
                     </mat-select-trigger> -->
-                    <ng-container *ngFor="let object of contactTypeList">
-                        <mat-option [value]="object.id">{{object.name}}</mat-option>
-                    </ng-container>
-            </mat-select>
-        </mat-form-field>
-
-    
-        <mat-form-field class="search" appearance="outline">
-        <mat-label>search in {{currentPage.toLowerCase()}}</mat-label>
-        <input class="search" matInput placeholder="ex:john!" #searchInput>
-        <mat-icon matSuffix>search</mat-icon>
-        <!-- <mat-hint>ex:john!</mat-hint> -->
-        </mat-form-field>
-    </div>
+        <ng-container *ngFor="let object of contactTypeList">
+          <mat-option [value]="object.id">{{ object.name }}</mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field
+      class="search"
+      appearance="outline"
+      [hidden]="checkPageSearch"
+    >
+      <mat-label>search in {{ currentPage.toLowerCase() }}</mat-label>
+      <input class="search" matInput placeholder="ex:john!" #searchInput />
+      <mat-icon matSuffix>search</mat-icon>
+      <!-- <mat-hint>ex:john!</mat-hint> -->
+    </mat-form-field>
+  </div>
 </div>

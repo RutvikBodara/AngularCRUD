@@ -1,0 +1,8 @@
+<div class="p-3 d-flex justify-content-center">
+    <div class="alert alert-success w-50" role="alert">  
+        <h2 class="text-center">Your payment is successfull</h2>
+        <h3 class="text-center">your transaction id is {{transactionIdValue}} </h3>
+        <h3 class="text-center">your product will delivered soon </h3>
+        <h5 class="text-center" [ngClass]="{'blink':timeOut}">page will be autometically redirect to home page after <span class="text-danger"> {{seconds}} </span> seconds</h5>
+    </div>
+</div>

@@ -103,7 +103,6 @@ export class ProductComponent {
     this.searchStringSubscription.unsubscribe()
   }
   displayedColumns: string[] = ['Id', 'Name', 'Surname', 'Action'];
-
   
   getProduct(){
     this.getProductSubscription = this.componentServices.get<string>(APIURL.getProduct,null,null,null,null,this.commonSearch).pipe(retryWhen(arr => arr.pipe(delay(1000), scan((retryCount) =>{

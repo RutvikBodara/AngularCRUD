@@ -10,6 +10,8 @@ import { CategoryComponent } from "../../module/procat/category/category.compone
 import { NewProductComponent } from "../../module/procat/product/new-product/new-product.component";
 import { ManipulateProductComponent } from "../../module/procat/product/manipulate-product/manipulate-product.component";
 import { EditCategoryComponent } from "../../module/procat/category/edit-category/edit-category.component";
+import { PaymentPageComponent } from "../../module/payment/payment-page/payment-page.component";
+import { CompletePaymentComponent } from "../../module/payment/complete-payment/complete-payment.component";
 
 
 export const routes: Route[] = [
@@ -60,5 +62,13 @@ export const routes: Route[] = [
         path:'login',
         redirectTo:'/auth',
         pathMatch:"full"
+    },
+    {
+        path:'paymentgateway',
+        component:PaymentPageComponent
+    },
+    {
+        path:'paymentcompleted',
+        component:CompletePaymentComponent
     }
 ];

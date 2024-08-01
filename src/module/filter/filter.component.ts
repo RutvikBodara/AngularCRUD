@@ -14,6 +14,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { constrainedMemory } from 'process';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
+import { ValueCache } from 'ag-grid-community';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class FilterComponent {
   currentPage:string;
   contactTypeList:responseData<string>[]
   checkPage:boolean =false;
+  checkPageSearch:boolean = false;
   @Output()
   sideBarToggle :EventEmitter<boolean> = new EventEmitter<boolean>(true)
   
@@ -46,6 +48,13 @@ export class FilterComponent {
       else{
         this.checkPage=false;
       }
+      if(value == "Payment Page" || value == "Payment Status"){
+        this.checkPage=true;
+        this.checkPageSearch=true
+      }
+      else{
+        this.checkPageSearch=false
+      }
     })
     
     this.componentService.get<string>(APIURL.getContactType).subscribe(
@@ -54,7 +63,6 @@ export class FilterComponent {
       }
     )
   }
-  
   
   onClickToggle(){
     this.sideBarToggle.emit()
