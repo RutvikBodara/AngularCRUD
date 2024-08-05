@@ -20,8 +20,8 @@ export class PaymentPageComponent {
     this.router.navigate(['/contact/paymentcompleted'])
   }
   ngOnInit() {
-    this.commonService.updatePage('Payment Page');
-    this.payment.updatetransactionId("deXoXXXX12XXXXza")
+    // this.commonService.updatePage('Payment Page');
+    // this.payment.updatetransactionId("deXoXXXX12XXXXza")
     window.paypal
       .Buttons({
         style: {
@@ -44,11 +44,13 @@ export class PaymentPageComponent {
         },
         onApprove:(data:any,actions:any) =>{
           return actions.order.capture().then((result) => {
-           if(result.status === 'COMPLETED')
-            this.payment.updatetransactionId(result.id)
-            this.router.navigate(['/contact/paymentcompleted'])
-          }).catch((err) => {
-            this.commonService.showSnackBar("Payment Failed!")
+           if(result.status === 'COMPLETED'){
+            console.log("id" + result.id)
+             this.payment.updatetransactionId(result.id)
+             this.router.navigate(['/contact/paymentcompleted'])
+            }
+            }).catch((err) => {
+            this.commonService.showAlert("transcation failed","if money deducted from your account please call customer care for help!","error")
           });
         }
       })

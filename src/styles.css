@@ -1,22 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
-html, body { height: 100%;}
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; height: 100%; background-color: #fafafa;}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100%;
+  /* background-color: #fafafa;
+   */
+   /* --primary-bg-color: #fafafa;
+   --primary-text-color:#000000;
+   &.dark{
+    --primary-bg-color: #222831;
+    --primary-text-color:#ffd369;
+   } */
+   /* --main-bg-color: */
+}
 ::selection {
-    color: #fafafa;
-    background: #ffdf6b;
+  color: #fafafa;
+  background: #ffdf6b;
 }
-.call{
-    position: absolute;
-    font-size: 24px;
-    color: rgb(255, 225, 0);
-    transform: translate(-50%, -50%);
-    pointer-events: none; 
-    z-index: 100;
+.call {
+  position: absolute;
+  font-size: 24px;
+  color: rgb(255, 225, 0);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 100;
 }
-button,.btn{
-    z-index: 1000000;
+button,
+.btn {
+  z-index: 1000000;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

@@ -14,13 +14,13 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { constrainedMemory } from 'process';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
-import { ValueCache } from 'ag-grid-community';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 
 @Component({
   selector: 'app-filter',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,FormsModule, MatSelectModule,MatFormFieldModule,MatInputModule,MatIconModule,MatButtonModule,MatDrawer,MatSidenavModule,SidebarComponent],
+  imports: [MatSlideToggleModule,CommonModule,ReactiveFormsModule,FormsModule, MatSelectModule,MatFormFieldModule,MatInputModule,MatIconModule,MatButtonModule,MatDrawer,MatSidenavModule,SidebarComponent],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css'
 })
@@ -30,6 +30,7 @@ export class FilterComponent {
   contactTypeList:responseData<string>[]
   checkPage:boolean =false;
   checkPageSearch:boolean = false;
+  isDark:boolean=false;
   @Output()
   sideBarToggle :EventEmitter<boolean> = new EventEmitter<boolean>(true)
   
@@ -67,6 +68,22 @@ export class FilterComponent {
   onClickToggle(){
     this.sideBarToggle.emit()
   }
+  // toggleColor(){
+  //   if(!this.isDark){
+  //     if(!document.body.classList.contains('dark')){
+  //       console.log("enter")
+  //       document.body.classList.add('dark');
+  //       this.isDark=true
+  //     }
+  //   }
+  //   else{
+  //     if(document.body.classList.contains('dark')){
+  //       console.log("enter2")
+  //       document.body.classList.remove('dark');
+  //       this.isDark=false
+  //     }
+  //   }
+  // }
   @ViewChild('searchInput') searchString :ElementRef;
   
   // @Output()

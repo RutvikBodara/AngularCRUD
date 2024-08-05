@@ -12,6 +12,7 @@ import { ManipulateProductComponent } from "../../module/procat/product/manipula
 import { EditCategoryComponent } from "../../module/procat/category/edit-category/edit-category.component";
 import { PaymentPageComponent } from "../../module/payment/payment-page/payment-page.component";
 import { CompletePaymentComponent } from "../../module/payment/complete-payment/complete-payment.component";
+import { BestPracticesComponent } from "../../module/Knowledge/best-practices/best-practices.component";
 
 
 export const routes: Route[] = [
@@ -70,5 +71,9 @@ export const routes: Route[] = [
     {
         path:'paymentcompleted',
         component:CompletePaymentComponent
+    },
+    {
+        path:'knowledge',
+        component:BestPracticesComponent
     }
 ];
