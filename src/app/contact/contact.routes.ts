@@ -13,6 +13,7 @@ import { EditCategoryComponent } from "../../module/procat/category/edit-categor
 import { PaymentPageComponent } from "../../module/payment/payment-page/payment-page.component";
 import { CompletePaymentComponent } from "../../module/payment/complete-payment/complete-payment.component";
 import { BestPracticesComponent } from "../../module/Knowledge/best-practices/best-practices.component";
+import { ProductMatComponent } from "../../module/procat/product-mat/product-mat.component";
 
 
 export const routes: Route[] = [
@@ -75,5 +76,9 @@ export const routes: Route[] = [
     {
         path:'knowledge',
         component:BestPracticesComponent
+    },
+    {
+        path:'productmat',
+        component:ProductMatComponent
     }
 ];

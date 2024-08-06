@@ -1,4 +1,4 @@
-<ng-container *ngIf="dataSourceCount != 0; else dataNotFound">
+<!-- <ng-container *ngIf="dataSourceCount != 0; else dataNotFound">
   <div class="contact-data mt-5">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropList (cdkDropListDropped)="drop($event)">
       
@@ -72,4 +72,8 @@
   <div class="text-center m-5 text-danger h2">
     {{errorMessage}}
   </div>
-</ng-template>
+</ng-template> -->
+
+<app-common-table-grid  [displayedColumns]="displayedColumns" [data]="dataSource" [paginatorLength]=" dataSourceCount" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)">
+
+</app-common-table-grid>

@@ -1,7 +1,7 @@
 import { Component, Input, input } from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import { ComponentService } from '../../../services/component.service';
-import { responseData, result } from '../../../interface/result';
+import { genericResponeDemo, responseData, result } from '../../../interface/result';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
@@ -21,11 +21,14 @@ import { CommonService } from '../../../services/common.service';
 // import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
 import {DragDropModule , CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { shareReplay } from 'rxjs';
+import { SortController } from 'ag-grid-community';
+import { CommonTableGridComponent } from '../../common/common-table-grid/common-table-grid.component';
+import { contact } from '../../../environment/commonValues';
 
 @Component({
   selector: 'app-contactlist',
   standalone: true,
-  imports: [DragDropModule,MatTableModule,MatMenuModule,MatIconModule,CommonModule,FormsModule,MatButtonModule,MatDividerModule],
+  imports: [CommonTableGridComponent,DragDropModule,MatTableModule,MatMenuModule,MatIconModule,CommonModule,FormsModule,MatButtonModule,MatDividerModule],
   templateUrl: './contactlist.component.html',
   styleUrl: './contactlist.component.css'
 })
@@ -43,6 +46,10 @@ export class ContactlistComponent {
   surname:string="";
   id:number=undefined;
   errorMessage:String = "No Data Found";
+  pagenumber:number;
+  pagesize:number;
+  sortedcolumn:string;
+  sorteddirection:string;
   ngOnInit(){
     // this.getContact()
     this.commonService.updatePage("Dashboard")
@@ -87,17 +94,36 @@ export class ContactlistComponent {
   //     console.log('No contacts to filter.');
   //   }
   // }
-  displayedColumns: string[] = ['Id', 'Name', 'Surname', 'Action'];
+  displayedColumns: string[] = ['id', 'name', 'surname', 'action'];
   // onRowClick(row:result<string>){
   //   console.log(row)
+  // // }
+  // drop(event: CdkDragDrop<any[]>) {
+  //   // const previousIndex = this.dataSource.findIndex((d) => d === event.item.data);
+  //   moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
   // }
-  drop(event: CdkDragDrop<any[]>) {
-    // const previousIndex = this.dataSource.findIndex((d) => d === event.item.data);
-    moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
+
+  paginationChanged(event){
+    console.log(event)
+    this.pagenumber=event[0];
+    this.pagesize =event[1];
+    this.getContact();
   }
+  orderChanged(event){
+    this.sortedcolumn = event[0];
+    this.sorteddirection =event[1];
+    console.log(event)
+    this.getContact();
+  }
+
+  // commonsearch?,
+  // sortcolumn?,
+  // sortdirection?,
+  // pageNumber?,
+  // pageSize?
   getContact(){
-    this.componentServices.get<string>(APIURL.getContact,this.name,this.surname,this.id,this.contactList).pipe(shareReplay(1)).subscribe(
-      (result:result<string>)=>{
+    this.componentServices.get<string>(APIURL.getContact,this.name,this.surname,this.id,this.contactList,null,this.sortedcolumn,this.sorteddirection,this.pagenumber,this.pagesize).pipe(shareReplay(1)).subscribe(
+      (result:genericResponeDemo<contact[]>)=>{
         if(result.code == 106){
           this.errorMessage ="You Are Not Authorized To Do This Action"
           this.dataSourceCount =0
@@ -106,7 +132,7 @@ export class ContactlistComponent {
           console.log("this")
           console.log(result)
           this.dataSource =result.responseData
-          this.dataSourceCount =result.responseData.length
+          this.dataSourceCount =result.dataCount
         }
       },
       (error)=>{

@@ -15,6 +15,8 @@ export class genericResponeDemo<T>{
     code:number
     message:string
     responseData:T
+    maxPage?
+    dataCount?
 }
 
 export class LoginDataResponse<T>{

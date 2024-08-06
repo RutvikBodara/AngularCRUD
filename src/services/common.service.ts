@@ -40,7 +40,17 @@ export class CommonService {
     new BehaviorSubject<category>(null);
   categoryDetails$ = this.categoryDetails.asObservable();
 
+  private loaderVisibility: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
+  
+  loaderVisibility$=this.loaderVisibility.asObservable()
+    
+
   constructor(private _snackBar: MatSnackBar, private router: Router) {}
+
+  LoaderVisibilityUpdate(visible:boolean){
+    this.loaderVisibility.next(visible);
+  }
   updatesearch(value: number | string) {
     this.searchValue.next(value);
   }

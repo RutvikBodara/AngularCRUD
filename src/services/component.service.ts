@@ -22,7 +22,11 @@ export class ComponentService {
     surname?:T,
     id?:number,
     typeList?:string,
-    commonsearch?
+    commonsearch?,
+    sortcolumn?,
+    sortdirection?,
+    pageNumber?,
+    pageSize?
   ):Observable<any>
   {
     let parameters =new HttpParams()
@@ -42,7 +46,18 @@ export class ComponentService {
     if(commonsearch){
       parameters =parameters.set('commonsearch',commonsearch)
     }
-
+    if(sortcolumn){
+      parameters =parameters.set('sortedcolumn',sortcolumn)
+    }
+    if(sortdirection){
+      parameters =parameters.set('sorteddirection',sortdirection)
+    }
+    if(pageNumber){
+      parameters =parameters.set('pagenumber',pageNumber)
+    }
+    if(pageSize){
+      parameters =parameters.set('pagesize',pageSize)
+    }
     return this.http.get(suburl,{params:parameters}).pipe(shareReplay())
   }
 

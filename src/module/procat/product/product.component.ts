@@ -85,7 +85,6 @@ export class ProductComponent {
       cellRenderer:ActionMenuComponent,
       sortable:false
     }
-
   ]
 
   ngOnInit(){
@@ -101,6 +100,7 @@ export class ProductComponent {
 
   ngOnDestroy(){
     this.searchStringSubscription.unsubscribe()
+    this.getProductSubscription.unsubscribe()
   }
   displayedColumns: string[] = ['Id', 'Name', 'Surname', 'Action'];
   
