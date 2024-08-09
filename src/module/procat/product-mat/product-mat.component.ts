@@ -1,15 +1,19 @@
 import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Pipe, PipeTransform, ViewChild} from '@angular/core';
 import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
-import { delay, retryWhen, scan, Subscription } from 'rxjs';
+import { catchError, delay, retryWhen, scan, Subscription, throwError } from 'rxjs';
 import { ComponentService } from '../../../services/component.service';
 import { APIURL } from '../../../environment/redirection';
 import { CommonService } from '../../../services/common.service';
 import { genericResponeDemo, product, result } from '../../../interface/result';
 import { DatePipe } from '@angular/common';
 import { CommonTableGridComponent } from '../../common/common-table-grid/common-table-grid.component';
+import { Router } from '@angular/router';
+import { DeleteProductDialogComponent } from '../product/action-menu/delete-product-dialog/delete-product-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-product-mat',
@@ -19,8 +23,10 @@ import { CommonTableGridComponent } from '../../common/common-table-grid/common-
   styleUrl: './product-mat.component.css'
 })
 
-export class ProductMatComponent {
 
+export class ProductMatComponent  {
+
+  authorized:boolean=false;
   commonSearch=null;
   errorMessage:String = "No Data Found";
   searchStringSubscription:Subscription;
@@ -34,8 +40,10 @@ export class ProductMatComponent {
   pagesize:number;
   sortedcolumn:string;
   sorteddirection:string;
-
-  constructor(private _liveAnnouncer: LiveAnnouncer,private componentServices :ComponentService,private commonService : CommonService) {}
+  deleteId:number;
+  deleteDataSubscription :Subscription;
+  searchTerms;
+  constructor(private dialog:MatDialog,private router:Router,private _liveAnnouncer: LiveAnnouncer,private componentServices :ComponentService,private commonService : CommonService) {}
 
   // @ViewChild(MatSort) sort: MatSort;
   
@@ -45,7 +53,17 @@ export class ProductMatComponent {
     this.commonService.updatePage("Products Grid")
     this.searchStringSubscription = this.commonService.searchstring$.subscribe((value:number|string)=>{
         this.commonSearch =value
+        if(typeof value == 'string'){
+          this.searchTerms =value.split('')
+        }
         this.getProduct()
+    });
+    this.deleteDataSubscription= this.commonService.deleteData$.subscribe((Res : Boolean)=>{
+      if(Res){
+        console.log(Res)
+        console.log("hey whats app")
+        this.deleteProduct()
+      }
     });
   }
 
@@ -72,6 +90,53 @@ export class ProductMatComponent {
     this.sorteddirection =event[1];
     console.log(event)
     this.getProduct();
+  }
+
+  onEditButtonClick(data): void {
+    // console.log(this.params.data)
+    this.commonService.updateProductDetails(data)
+    this.router.navigate(['/contact/editproduct'])
+    // Access row data via this.params.data
+    console.log('Row Data:',data);
+    // Or access specific field value
+    // console.log('Specific Value:', this.params.data.fieldName);
+  }
+  deletePopUp(id){
+    this.deleteId=id
+    this.commonService.updateDeleteTagLine("once you delete product,this product no longer")
+    this.commonService.updateDeleteTitle("Delete Product?")
+    this.openDeleteDialog('0','0');
+  }
+
+  ngOnDestroy(){
+    this.deleteDataSubscription.unsubscribe()
+  }
+  openDeleteDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(DeleteProductDialogComponent, {
+      width: '500px',
+      height:'300px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
+  deleteProduct(){
+    console.log(this.deleteId)
+    this.componentServices.delete<string>(this.deleteId,APIURL.deleteProduct).subscribe(
+      (res)=>{
+        if(res.code  == 100){
+          this.commonService.showSnackBar(res.message + "deleted success")
+          this.commonService.navigateOnSamePage()
+          this.commonService.deleteDataChange(false);
+        }
+        else{
+          this.commonService.deleteDataChange(false);
+          this.commonService.showSnackBar(res.message)
+        }
+      },
+      (error)=>{
+        console.error(error);
+      }
+    )
   }
 
   // int? pagenumber, int? pagesize, string? sortedcolumn, string? sorteddirection
@@ -114,13 +179,26 @@ export class ProductMatComponent {
         console.log(this.retryCount)
       }
       this.retryCount++;
-    },0)))).subscribe(
+    },0)))).pipe(
+      catchError((err) => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status == 401) {
+            this.errorMessage ="You Are Not Authorized To Do This Action"
+            this.authorized =false;
+          } else {
+            console.error('http error', err);
+          }
+        }
+        return throwError(() => err);
+      }),
+
+    ).subscribe(
       (result:genericResponeDemo<product[]>)=>{
         if(result.code == 106){
           this.errorMessage ="You Are Not Authorized To Do This Action"
         }
         else{
-         
+          this.authorized =true;
           // result.responseData.map((products:any)=>{
           //   products.image = this.blobToFile(products.image,products.imagename)
           // }
@@ -130,9 +208,6 @@ export class ProductMatComponent {
           console.log(result.responseData)
           this.dataSource =new MatTableDataSource(result.responseData);
         }
-      },
-      (error)=>{
-        console.log(error)
       }
     )
   }

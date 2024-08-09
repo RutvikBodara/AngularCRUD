@@ -43,13 +43,13 @@ export class FilterComponent {
 
     this.commonService.currentPage$.subscribe((value)=>{
       this.currentPage=value
-      if(value == "Products" || value == "Category"){
+      if(value == "Products" || value == "Category" || value == "My Profile"){
         this.checkPage =true
       }
       else{
         this.checkPage=false;
       }
-      if(value == "Payment Page" || value == "Payment Status"){
+      if(value == "Payment Page" || value == "Payment Status" || value == "My Profile"){
         this.checkPage=true;
         this.checkPageSearch=true
       }

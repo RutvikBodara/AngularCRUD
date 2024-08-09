@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonService } from '../../../../../services/common.service';
 import { ComponentSelector } from 'ag-grid-community';
@@ -6,6 +6,7 @@ import { ComponentService } from '../../../../../services/component.service';
 import { product } from '../../../../../interface/result';
 import { APIURL } from '../../../../../environment/redirection';
 import { MatDialogRef } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-delete-product-dialog',
@@ -15,34 +16,24 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrl: './delete-product-dialog.component.css'
 })
 export class DeleteProductDialogComponent {
+  tagLineDelete:string = "nothing have to delete"
+  deleteTitle:string = "title"
   constructor(private dialogRef:MatDialogRef<DeleteProductDialogComponent>, private router:Router,private commonService:CommonService,private componentService:ComponentService){}
   productDetails:product;
+  
+  ngOnInit(){
+    this.commonService.deleteTagLine$.subscribe((Res)=>{
+      this.tagLineDelete= Res
+    })
+    this.commonService.deleteTitle$.subscribe((res)=>{
+      this.deleteTitle = res
+    })
+  }
   delete(){
-    this.commonService.product$.subscribe((res)=>{
-      this.productDetails = res
-      console.log(res)
-    });
-    this.deleteProduct();
+    // want id here to transmit
+    console.log("hey hii")
+    this.commonService.deleteDataChange(true);
+    this.dialogRef.close()
   }
-  deleteProduct(){
-    this.componentService.delete<string>(this.productDetails.id,APIURL.deleteProduct).subscribe(
-      (res)=>{
-        if(res.code  == 100){
-          this.commonService.showSnackBar(res.message + "deleted success")
-          this.dialogRef.close()
-          this.commonService.navigateOnSamePage()
-        }
-        else{
-          this.commonService.showSnackBar(res.message)
-        }
-
-      },
-      (error)=>{
-        console.error(error);
-      }
-    )
-
-  }
-
 
 }

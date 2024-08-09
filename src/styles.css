@@ -83,3 +83,18 @@ body {
     background-size: 100% 100%;
   }
 }
+.custom-snackbar-success {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.custom-snackbar-error {
+  background-color: #f44336; 
+  color: #fff;
+}
+
+.custom-snackbar-warning {
+  background-color: #ff9800; 
+  color: #fff;
+}
+

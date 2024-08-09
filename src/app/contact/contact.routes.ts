@@ -14,51 +14,62 @@ import { PaymentPageComponent } from "../../module/payment/payment-page/payment-
 import { CompletePaymentComponent } from "../../module/payment/complete-payment/complete-payment.component";
 import { BestPracticesComponent } from "../../module/Knowledge/best-practices/best-practices.component";
 import { ProductMatComponent } from "../../module/procat/product-mat/product-mat.component";
+import { authGuard } from "../../guard/guards/auth.guard";
+import { ProfileComponent } from "../../module/account/profile/profile.component";
 
 
 export const routes: Route[] = [
     {
         path:'',
         component:ContactlistComponent,
-        pathMatch:"full"
+        pathMatch:"full",
+        canActivate: [authGuard] 
     },
     {
         path:'contactdetails',
-        component:ContactlistComponent
+        component:ContactlistComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'newcontact',
         component:NewContactComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'contactType',
-        component:ContactTypeComponent
+        component:ContactTypeComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'contactTypeAccordian',
-        component:NewContactTypeAccordionComponent
+        component:NewContactTypeAccordionComponent,
+        canActivate: [authGuard] 
 
     },
     {
         path:'product',
-        component:ProductComponent
+        component:ProductComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'addproduct',
-        component:NewProductComponent
+        component:NewProductComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'editproduct',
-        component:ManipulateProductComponent
+        component:ManipulateProductComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'category',
-        component:CategoryComponent
+        component:CategoryComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'editcategory',
-        component:EditCategoryComponent
-
+        component:EditCategoryComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'login',
@@ -67,18 +78,33 @@ export const routes: Route[] = [
     },
     {
         path:'paymentgateway',
-        component:PaymentPageComponent
+        component:PaymentPageComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'paymentcompleted',
-        component:CompletePaymentComponent
+        component:CompletePaymentComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'knowledge',
-        component:BestPracticesComponent
+        component:BestPracticesComponent,
+        canActivate: [authGuard] 
     },
     {
         path:'productmat',
-        component:ProductMatComponent
-    }
+        component:ProductMatComponent,
+        canActivate: [authGuard] 
+    },
+    {
+        path:'myprofile',
+        component:ProfileComponent,
+        canActivate:[authGuard]
+    },
+    {
+        path:'**',
+        redirectTo:'/auth',
+        pathMatch:'full',
+    },
+    
 ];

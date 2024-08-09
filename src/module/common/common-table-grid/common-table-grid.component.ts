@@ -1,5 +1,5 @@
 import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {AfterViewInit, Component, EventEmitter, Input, input, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, input, Output, Pipe, PipeTransform, ViewChild} from '@angular/core';
 import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
@@ -9,6 +9,9 @@ import { APIURL } from '../../../environment/redirection';
 import { CommonService } from '../../../services/common.service';
 import { genericResponeDemo, product, result } from '../../../interface/result';
 import { CommonModule, DatePipe } from '@angular/common';
+import { DeleteProductDialogComponent } from '../../procat/product/action-menu/delete-product-dialog/delete-product-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-common-table-grid',
@@ -17,13 +20,25 @@ import { CommonModule, DatePipe } from '@angular/common';
   templateUrl: './common-table-grid.component.html',
   styleUrl: './common-table-grid.component.css'
 })
-export class CommonTableGridComponent {
+// @Pipe({
+//   name:'highlight'
+// })
 
+export class CommonTableGridComponent  {
+
+  // transform(value: any, ...args: any[]) {
+  //   if(!args){return value;}
+  //   for (const text in args){
+  //     var regex = new RegExp(text,'gi')
+  //     value = value.replace(regex, "<span class='highlight-search-text'>" + text + "</span>"); 
+  //   }
+  // }
   commonSearch=null;
   errorMessage:String = "No Data Found";
   searchStringSubscription:Subscription;
   getProductSubscription : Subscription;
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  
   
   @Input()
   displayedColumns : string[];
@@ -50,8 +65,12 @@ export class CommonTableGridComponent {
   @Output()
   orderChanged :EventEmitter<string[]> = new EventEmitter<string[]>()
 
+  @Output()
+  potentialEdit= new EventEmitter()
 
-  constructor(private _liveAnnouncer: LiveAnnouncer,private componentServices :ComponentService,private commonService : CommonService) {}
+  @Output()
+  deleteIdEmit:EventEmitter<number> = new EventEmitter<number>()
+  constructor(private _liveAnnouncer: LiveAnnouncer,private componentServices :ComponentService,private commonService : CommonService,private dialog :MatDialog) {}
 
   @ViewChild(MatSort) sort: MatSort;
   
@@ -61,7 +80,7 @@ export class CommonTableGridComponent {
     this.data =this.data;
     // this.paginator.length =this.paginatorLength;
   }
-  
+
   ngAfterViewInit() {
     this.paginator.page.subscribe((event: PageEvent) => {
       console.log('Page Index:', event.pageIndex);
@@ -88,6 +107,16 @@ export class CommonTableGridComponent {
       console.log(this.sortedcolumn +" " +this.sorteddirection )
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+
+  onEditButtonClick(data): void {
+    //give data back to parent
+    this.potentialEdit.emit(data);
+  }
+
+  onDeleteButtonClick(data): void {
+    this.commonService.updateProductDetails(data)
+    this.deleteIdEmit.emit(data)
   }
 
   // onPageChange(): void {

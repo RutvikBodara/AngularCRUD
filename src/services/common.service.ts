@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { equal } from 'assert';
 import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,6 +7,7 @@ import { product } from '../interface/result';
 import { Router } from '@angular/router';
 import { category } from '../interface/common';
 import Swal from 'sweetalert2';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
@@ -28,6 +29,9 @@ export class CommonService {
   );
   currentPage$ = this.currentPage.asObservable();
 
+  private backgroundColor : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  backgroundColor$ = this.backgroundColor.asObservable()
+
   private serchContactType: BehaviorSubject<string> =
     new BehaviorSubject<string>(null);
   searchContactType$ = this.serchContactType.asObservable();
@@ -42,17 +46,47 @@ export class CommonService {
 
   private loaderVisibility: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
-  
-  loaderVisibility$=this.loaderVisibility.asObservable()
-    
 
-  constructor(private _snackBar: MatSnackBar, private router: Router) {}
+  private isSessionActive: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
+  isSessionActive$ = this.isSessionActive.asObservable();
 
-  LoaderVisibilityUpdate(visible:boolean){
+  loaderVisibility$ = this.loaderVisibility.asObservable();
+
+  private deleteTagLine: BehaviorSubject<string> = new BehaviorSubject<string>(
+    'no data to delet'
+  );
+  deleteTagLine$ = this.deleteTagLine.asObservable();
+
+  private deleteTitle: BehaviorSubject<string> = new BehaviorSubject<string>(
+    'delete title'
+  );
+  deleteTitle$ = this.deleteTitle.asObservable();
+
+  private deleteData: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
+  deleteData$ = this.deleteData.asObservable();
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private _snackBar: MatSnackBar,
+    private router: Router
+  ) {
+    // const localStorage = document.defaultView?.localStorage;
+  }
+
+  LoaderVisibilityUpdate(visible: boolean) {
     this.loaderVisibility.next(visible);
+  }
+  backgroundColorChange(value:boolean){
+    this.backgroundColor.next(value)
   }
   updatesearch(value: number | string) {
     this.searchValue.next(value);
+  }
+  deleteDataChange(value: boolean) {
+    this.deleteData.next(value);
   }
   unSubscribeProduct() {
     this.searchValue.unsubscribe();
@@ -69,7 +103,7 @@ export class CommonService {
   updateCategory(cat: category) {
     this.categoryDetails.next(cat);
   }
-  showSnackBar(value: string) {
+  showSnackBar(value: string,defaultclass = "success") {
     this._snackBar.open(value, 'close', {
       duration: 3000,
       verticalPosition: 'top',
@@ -77,10 +111,25 @@ export class CommonService {
     });
   }
   setLocal(value: string, name: string): void {
-    localStorage.setItem(name, value);
+    const expirationTime = new Date().getTime() + (360000 *2 );
+    const item = {
+      value: value,
+      expirationTime: expirationTime,
+    };
+    localStorage.setItem(name, JSON.stringify(item));
   }
-  getLocal(name: string): string {
-    return localStorage.getItem(name);
+  getLocal(name: string) {
+    // if (isPlatformBrowser(this.platformId)) 
+      
+      return localStorage.getItem(name);
+    // else return null;
+  }
+  removeLocal(name: string) {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(name);
+      return true;
+    }
+    return false;
   }
 
   navigateOnSamePage() {
@@ -98,5 +147,49 @@ export class CommonService {
       confirmButtonText: 'OK',
       timer: 10000,
     });
+  }
+  updateDeleteTagLine(value: string) {
+    this.deleteTagLine.next(value);
+  }
+  updateDeleteTitle(value: string) {
+    this.deleteTitle.next(value);
+  }
+
+  login(): void {}
+
+  logout(): void {
+    this.removeLocal("jwt")
+    this.removeLocal("userName")
+    this.removeLocal("email")
+  }
+
+  isUserLoggedIn() {
+    const itemStr :string = this.getLocal("jwt")
+    // console.log(itemStr)
+
+    // if(itemStr == null){
+    //   console.log("i am null")
+    //   return false;
+    // }
+    // return true;
+    if (itemStr == null) {
+      return false; // Item does not exist
+    }
+
+    try {
+      const item = JSON.parse(itemStr);
+  
+      const currentTime = new Date().getTime();
+      if (currentTime > item.expirationTime) {
+       
+        this.removeLocal("jwt")
+
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.error('Error parsing localStorage item', e);
+      return false;
+    }
   }
 }

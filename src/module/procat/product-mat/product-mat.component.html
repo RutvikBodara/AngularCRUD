@@ -113,7 +113,12 @@
   showFirstLastButtons
 >
 </mat-paginator> -->
-
-<app-common-table-grid  [displayedColumns]="displayedColumns" [data]="dataSource" [paginatorLength]=" paginatorLength" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)">
-
-</app-common-table-grid>
+<ng-container ngIf="authorized; else unauthorized">
+  <app-common-table-grid  [displayedColumns]="displayedColumns" [data]="dataSource" [paginatorLength]=" paginatorLength" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (deleteIdEmit)="deletePopUp($event)" (potentialEdit)="onEditButtonClick($event)">  
+  </app-common-table-grid>
+</ng-container>
+<ng-template #unauthorized>
+  <h2>
+    {{errorMessage}}
+  </h2>
+</ng-template>

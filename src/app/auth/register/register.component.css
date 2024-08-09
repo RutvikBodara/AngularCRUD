@@ -1,0 +1,15 @@
+.loginDiv{
+    width: fit-content;
+    padding: 2vw;
+    border-style: solid;
+    border-color: rebeccapurple;
+    /* border-radius: 1%; */
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+:host{
+    padding: 10vw;
+}

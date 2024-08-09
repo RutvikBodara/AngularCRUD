@@ -3,6 +3,8 @@ import { Route, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ContactComponent } from './contact/contact.component';
 import { CommonModule } from '@angular/common';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
+import { CommonService } from '../services/common.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -28,18 +30,29 @@ import { animate, keyframes, style, transition, trigger } from '@angular/animati
   ]
 })
 export class AppComponent {
-  constructor(private router :Router){}
+  constructor(private router :Router,private commonService:CommonService){}
   title = 'CrudAngular';
-  login:boolean=true;
+  //temporary
+  backgoundColor:boolean;
+  backgroundUnSubscribe:Subscription;
   calls :{
     top:number
     left:number
   }[] =[];
 
   ngOnInit(){
-    if(!this.login){
-      this.router.navigate(['auth'])
-    }
+    // this.backgroundUnSubscribe = this.commonService.backgroundColor$.subscribe((Res)=>{
+    //   this.backgoundColor= Res
+    // })
+    // console.log("heyyy")
+    // console.log(this.commonService.getLocal("jwt"))
+    // if(this.commonService.getLocal("jwt") == undefined || this.commonService.getLocal("jwt") == null){
+      
+    //   this.router.navigate(['auth'])
+    // }
+  }
+  ngOnDestroy(){
+    // this.backgroundUnSubscribe.unsubscribe()
   }
   addCallAnimation(event :MouseEvent):void{
     const newCall ={top:event.clientY, left:event.clientX}

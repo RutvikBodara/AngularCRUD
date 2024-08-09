@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {MatInputModule} from '@angular/material/input';
@@ -12,6 +12,7 @@ import { genericResponeDemo, LoginDataRequest, LoginDataResponse, result } from 
 import { APIURL } from '../../../environment/redirection';
 import { CommonService } from '../../../services/common.service';
 import { Router } from '@angular/router';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -25,11 +26,18 @@ export class LoginComponent {
   constructor(private router :Router, private formbuilderinstance:FormBuilder ,private componentService:ComponentService,private commonService :CommonService){}
   contactForm: FormGroup;
   requestLoginData : LoginDataRequest<string>;
+  @ViewChild('registerLink') registerLink :ElementRef;
   ngOnInit(){
     this.contactForm =this.formbuilderinstance.group({
       username:['',[Validators.required,Validators.minLength(3)]],
       password:['',[Validators.required,Validators.minLength(3)]]
     });
+  }
+  ngAfterViewInit(){
+    fromEvent(this.registerLink.nativeElement,"click").subscribe((Res)=>{
+      this.router.navigate(['auth/register'])
+    })
+    // this.commonService.backgroundColorChange(false)
   }
   onSubmit()
   {
@@ -43,13 +51,21 @@ export class LoginComponent {
 
       this.componentService.login<LoginDataResponse<string>>(this.requestLoginData , APIURL.login).subscribe(
         (result:genericResponeDemo<LoginDataResponse<string>>)=>{
+          console.log(result)
           if(result.code == 100){
-            //store token in local host
-            this.commonService.setLocal(result.responseData.JWTToken , "jwt")
+            console.log(result)
+
+            this.commonService.setLocal(result.responseData.jwtToken , "jwt")
+            this.commonService.setLocal(result.responseData.userName,'username')
+            // this.commonService.setLocal(result.responseData.UserName,'FirstName')
+            this.commonService.setLocal(result.responseData.emailId,'email')
+            console.log(this.commonService.getLocal("email"))
+            console.log("local val")
+            this.commonService.showSnackBar("login successfull")
             this.router.navigate(["/contact"])
           }
           else {
-            this.commonService.showSnackBar(result.message)
+            this.commonService.showSnackBar(result.message,"mat-accent")
           }
         }
       )

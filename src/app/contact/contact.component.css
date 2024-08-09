@@ -4,7 +4,6 @@
 .contact-container {
     height: 100vh;
     padding: 25px;
-    
   }
   .contact-sidenav{
     width: 300px;
@@ -63,4 +62,6 @@
 .clicked{
     background-color:#ffe792 ;
 }
-
+#LogoutBtn:hover {
+  transform: scale(1.2);
+}

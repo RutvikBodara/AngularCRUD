@@ -74,6 +74,6 @@
   </div>
 </ng-template> -->
 
-<app-common-table-grid  [displayedColumns]="displayedColumns" [data]="dataSource" [paginatorLength]=" dataSourceCount" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)">
+<app-common-table-grid  [displayedColumns]="displayedColumns" [data]="dataSource" [paginatorLength]=" dataSourceCount" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (deleteIdEmit)="deleteContact($event)" (potentialEdit)="editContact($event)"  >
 
 </app-common-table-grid>

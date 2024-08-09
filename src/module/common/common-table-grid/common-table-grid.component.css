@@ -1,0 +1,8 @@
+svg:hover{
+    cursor: pointer;
+}
+.highlight-search-text{
+    background-color: yellow;
+    font-weight: 600;
+    color: white;
+}

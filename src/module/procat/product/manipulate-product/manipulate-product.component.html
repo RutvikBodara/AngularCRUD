@@ -1,7 +1,7 @@
 
 <div class="p-3 mt-3" style="background-color: #fffcf0 ; border-radius: 25px;">
     <h2>Edit Product Details:</h2>
-    <form class="row" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <form class="row" [formGroup]="productForm" (ngSubmit)="onSubmit()" *ngIf="productForm">
         <mat-form-field appearance="outline" class="col-6 mt-3">
             <mat-label>Product Name</mat-label>
             <input matInput formControlName="name">

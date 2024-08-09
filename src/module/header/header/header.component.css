@@ -1,0 +1,19 @@
+.app-header{
+    font: 20px Arial;
+    display: inline-block;
+    padding: 1em 1em;
+    text-align: left;
+    color: black;
+    border-radius: 25px;
+    width: 100%;
+    background-color: #fffcf0;
+}
+img:hover{
+    cursor: pointer;
+}
+.listitem:hover{
+    cursor: pointer;
+    background-color:#fffcf0;
+    color: rebeccapurple;
+    border-radius: 20px;
+}

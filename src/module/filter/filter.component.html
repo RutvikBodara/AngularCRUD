@@ -1,4 +1,4 @@
-<div class="filter-contact d-flex justify-content-between">
+<div class="filter-contact d-md-flex justify-content-between mt-3">
   <div class="d-flex gap-3">
     <button mat-fab (click)="onClickToggle()">
       <mat-icon
@@ -13,10 +13,10 @@
     </button>
     <h2 class="mt-2">{{ currentPage }}</h2>
   </div>
-  <div class="d-flex gap-3">
+  <div class="d-md-flex gap-3 ">
     <mat-form-field appearance="outline" [hidden]="checkPage">
       <mat-label>search in {{ currentPage.toLowerCase() }}</mat-label>
-      <mat-select [formControl]="contactTypes" multiple>
+      <mat-select [formControl]="contactTypes" multiple >
         <!-- <mat-select-trigger>
                     {{contactTypes.value?.[0] || ''}}
                     @if ((contactTypes.value?.length || 0) > 1) {

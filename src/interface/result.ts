@@ -20,15 +20,24 @@ export class genericResponeDemo<T>{
 }
 
 export class LoginDataResponse<T>{
-    UserName:T
+    userName:T
     MobileNumber:number
-    JWTToken:T
+    jwtToken:T
     AccountId:number
-    EmailId:T
+    emailId:T
+    firstName:T
+    lastName:T
 }
 export class LoginDataRequest<T>{
     UserName :  T
     Password:T
+}
+export class RegisterDataRequest{
+    UserName : string
+    Password:string
+    Email:string
+    FirstName:string
+    LastName:string
 }
 export class product
 {

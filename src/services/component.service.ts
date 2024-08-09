@@ -1,17 +1,21 @@
 
-import { Injectable, QueryList } from '@angular/core';
+import { Inject, Injectable, QueryList } from '@angular/core';
 import { genericResponeDemo, product, productEdit, responseData, result } from '../interface/result';
 import { contact, webAPIURL } from '../environment/commonValues';
 import { APIURL } from '../environment/redirection';
 import { HttpClient, HttpClientModule, HttpHeaders, HttpParams } from '@angular/common/http';
 import { delay, Observable, retryWhen, scan, shareReplay } from 'rxjs';
 import { error } from 'node:console';
+import { DOCUMENT } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
 export class ComponentService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) 
+  {
+
+  }
   //passs perameter
   //output will be result of string
   //method will be string
@@ -84,9 +88,9 @@ export class ComponentService {
   }
 
   login<T>(data,suburl:string){
-    return this.http.post<genericResponeDemo<T>>(suburl,data).pipe(shareReplay())
+    return this.http.post(suburl,data).pipe(shareReplay())
   }
-  
+
   // getContactsType<T>
   // (
   //   name?:string ,id?:number
