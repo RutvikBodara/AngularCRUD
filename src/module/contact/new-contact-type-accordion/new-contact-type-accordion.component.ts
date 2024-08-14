@@ -4,8 +4,6 @@ import { responseData, result } from '../../../interface/result';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -21,7 +19,6 @@ import {
 } from '@angular/cdk/drag-drop';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { combineLatest, map, Subscription } from 'rxjs';
-import { subscriptionLogsToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Component({
   selector: 'app-new-contact-type-accordion',

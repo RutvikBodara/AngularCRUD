@@ -68,6 +68,7 @@ export class NewProductComponent {
   url;
   @ViewChild('newProductForm') form: ElementRef;
   @ViewChild('fileInput') selectedFile: ElementRef;
+  @ViewChild('backbtn') backbtnClick :ElementRef;
   categories: category[];
   task = signal<Task>({
     id: -1,
@@ -125,6 +126,7 @@ export class NewProductComponent {
     }
   }
   ngOnInit() {
+
     this.componentService.get(APIURL.getCountry).subscribe((res) => {
       console.log(res);
       this.addSubtasks(res);
@@ -153,6 +155,11 @@ export class NewProductComponent {
     this.getCategory();
   }
 
+  ngAfterViewInit(){
+    fromEvent(this.backbtnClick.nativeElement,"click").subscribe((Res)=>{
+      this.router.navigate(['/contact/productmat'])
+    })
+  }
   get countries(): FormArray {
     return this.productForm.get('countries') as FormArray;
   }

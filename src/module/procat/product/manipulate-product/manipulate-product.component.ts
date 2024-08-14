@@ -5,6 +5,8 @@ import {
   signal,
   input,
   booleanAttribute,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -36,7 +38,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Conditional } from '@angular/compiler';
 import { Sort } from '@angular/material/sort';
 import { ContentObserver } from '@angular/cdk/observers';
-import { Subscription } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-manipulate-product',
@@ -70,6 +72,8 @@ export class ManipulateProductComponent {
   filename;
   productSubscription :Subscription;
   selectedCountry: Sort[] = [];
+  @ViewChild('backbtn') backbtnClick :ElementRef;
+  
 
   task = signal<Task>({
     id: -1,
@@ -156,6 +160,11 @@ export class ManipulateProductComponent {
   ngOnDestroy() 
   {
     this.productSubscription.unsubscribe()
+  }
+  ngAfterViewInit(){
+    fromEvent(this.backbtnClick.nativeElement,"click").subscribe((Res)=>{
+      this.router.navigate(['/contact/productmat'])
+    })
   }
   ngOnInit() {
     this.commonService.updatePage('Edit Products');

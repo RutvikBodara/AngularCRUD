@@ -16,6 +16,7 @@ import { BestPracticesComponent } from "../../module/Knowledge/best-practices/be
 import { ProductMatComponent } from "../../module/procat/product-mat/product-mat.component";
 import { authGuard } from "../../guard/guards/auth.guard";
 import { ProfileComponent } from "../../module/account/profile/profile.component";
+import { CategoryMatComponent } from "../../module/procat/category-mat/category-mat.component";
 
 
 export const routes: Route[] = [
@@ -99,6 +100,11 @@ export const routes: Route[] = [
     {
         path:'myprofile',
         component:ProfileComponent,
+        canActivate:[authGuard]
+    },
+    {
+        path:'categorymat',
+        component:CategoryMatComponent,
         canActivate:[authGuard]
     },
     {

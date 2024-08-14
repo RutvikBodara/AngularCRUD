@@ -73,7 +73,7 @@ export class ComponentService {
     console.log(parameters)
     return this.http.delete<result<T>>(suburl,{params:parameters}).pipe(shareReplay())
   }
-  update<T>(data:responseData<T>,suburl:string){
+  update<T>(data,suburl:string){
     return this.http.patch<result<T>>(suburl,data).pipe(shareReplay())
   }
   updateProduct<T>(data:productEdit,suburl:string){

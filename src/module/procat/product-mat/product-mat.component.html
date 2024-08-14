@@ -114,7 +114,7 @@
 >
 </mat-paginator> -->
 <ng-container ngIf="authorized; else unauthorized">
-  <app-common-table-grid  [displayedColumns]="displayedColumns" [data]="dataSource" [paginatorLength]=" paginatorLength" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (deleteIdEmit)="deletePopUp($event)" (potentialEdit)="onEditButtonClick($event)">  
+  <app-common-table-grid  [displayedColumns]="displayedColumns" [data]="passedData" [paginatorLength]=" paginatorLength"  [expandableGrid]="expandableGrid"  [actionBtnAllowed]="actionBtnAllowed" [paginationAllowed]="paginationAllowed" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (deleteIdEmit)="deletePopUp($event)" (potentialEdit)="onEditButtonClick($event)">  
   </app-common-table-grid>
 </ng-container>
 <ng-template #unauthorized>

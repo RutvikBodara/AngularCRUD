@@ -1,0 +1,17 @@
+<app-common-table-grid
+  [displayedColumns]="displayedColumns"
+  [data]="dataSource"
+  [paginatorLength]="paginatorLength"
+  [childTable]="childTable"
+  [childDisplayColumns]="childDisplayColumns"
+  [childPaginatorLength]="childPaginatorLength"
+  [expandableGrid]="expandableGrid"
+  [actionBtnAllowed]="actionBtnAllowed"
+  [paginationAllowed]="paginationAllowed"
+  (paginationChanged)="paginationChanged($event)"
+  (orderChanged)="orderChanged($event)"
+  (deleteIdEmit)="deletePopUp($event)"
+  (potentialEdit)="onEditButtonClick($event)"
+  (getChildTableDataEmit)="sendChildTable($event)"
+>
+</app-common-table-grid>

@@ -23,7 +23,7 @@ export class LoginDataResponse<T>{
     userName:T
     MobileNumber:number
     jwtToken:T
-    AccountId:number
+    accountId:number
     emailId:T
     firstName:T
     lastName:T
@@ -37,6 +37,13 @@ export class RegisterDataRequest{
     Password:string
     Email:string
     FirstName:string
+    LastName:string
+}
+export class updateProfileRequest{
+    Id:number
+    UserName:string
+    Email:string
+    FirstName :string
     LastName:string
 }
 export class product
@@ -69,4 +76,12 @@ export class productEdit{
     availableForSale:Boolean;
     price;
     countryServed:Sort[]
+}
+export class myProfile{
+    id:number
+    firstname:string
+    lastname:string
+    createddate:Date
+    emailid:string
+    username:string
 }

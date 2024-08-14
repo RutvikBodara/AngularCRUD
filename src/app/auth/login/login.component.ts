@@ -51,15 +51,16 @@ export class LoginComponent {
 
       this.componentService.login<LoginDataResponse<string>>(this.requestLoginData , APIURL.login).subscribe(
         (result:genericResponeDemo<LoginDataResponse<string>>)=>{
+
           console.log(result)
           if(result.code == 100){
             console.log(result)
-
             this.commonService.setLocal(result.responseData.jwtToken , "jwt")
             this.commonService.setLocal(result.responseData.userName,'username')
             // this.commonService.setLocal(result.responseData.UserName,'FirstName')
             this.commonService.setLocal(result.responseData.emailId,'email')
-            console.log(this.commonService.getLocal("email"))
+            this.commonService.setLocal(result.responseData.accountId.toString(),'AccountId')
+            console.log(this.commonService.getLocal("AccountId"))
             console.log("local val")
             this.commonService.showSnackBar("login successfull")
             this.router.navigate(["/contact"])

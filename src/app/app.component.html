@@ -5,9 +5,7 @@
 </button> -->
 
 <div (mousemove)="addCallAnimation($event)" class="maindiv" [ngClass]="{'changeColor' : !backgoundColor}">
-  <ng-container>
     <div *ngFor="let call of calls; let index=index" class="call" [style.top.px]="call.top" [style.left.px]="call.left"  [@fadeoutanimation]="index">&#9733;</div>
-  </ng-container>
   <router-outlet>
   </router-outlet>
 </div>

@@ -1,1 +1,91 @@
-<p>profile works!</p>
+<div class="p-3 mt-3" style="background-color: #fffcf0; border-radius: 25px">
+  <h2>Edit Profile Details:</h2>
+
+  <div *ngIf="isFormChanged">
+    <p>The form has been changed.</p>
+  </div>
+  <form
+    [formGroup]="ProfileForm"
+    (ngSubmit)="onSubmit()"
+    *ngIf="ProfileForm"
+  >
+    <fieldset [disabled]="true" class="row">
+      <mat-form-field appearance="outline" class="col-6 mt-3">
+        <mat-label>UserName</mat-label>
+        <input matInput formControlName="username" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-6 mt-3">
+        <mat-label>Account CreatedDate</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker1"
+          formControlName="createddate"
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker1"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker1 [disabled]="true"></mat-datepicker>
+      </mat-form-field>
+    </fieldset>
+
+    <fieldset [disabled]="!fieldsetDisabled" class="row">
+      <mat-form-field appearance="outline" class="col-6 mt-3">
+        <mat-label>FirstName</mat-label>
+        <input matInput formControlName="firstname" />
+        <mat-error *ngIf="ProfileForm.get('firstname').hasError('required')">
+            firstname is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="col-6 mt-3">
+          <mat-label>LastName</mat-label>
+          <input matInput formControlName="lastname" />
+          <mat-error *ngIf="ProfileForm.get('lastname').hasError('required')">
+            lastname is required
+        </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-6 mt-3">
+            <mat-label>EmailId</mat-label>
+            <input matInput formControlName="emailid" />
+            <mat-error *ngIf="ProfileForm.get('emailid').hasError('required')">
+                email is required
+            </mat-error>
+            <mat-error *ngIf="ProfileForm.get('emailid').hasError('email')">
+                email format is not valid
+            </mat-error>
+        </mat-form-field>
+    </fieldset>
+      <!-- <span class="d-flex justify-content-center">
+            <img src="data:image/jpeg;base64,{{currentProduct.image }}" height="250px" width="250px">
+        </span> -->
+    <div class="d-flex justify-content-end gap-2">
+      <button
+        mat-raised-button
+        color="primary"
+        [hidden]="hiddenValue"
+        #resetBtn
+        (click)="resetToggle($event)"
+      >
+        Reset
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [hidden]="hiddenValue"
+        type="submit"
+      >
+        Submit
+      </button>
+      <button
+        class="btn btn-danger"
+        [hidden]="!hiddenValue"
+        #editBtns
+        (click)="hideToggle($event)"
+      >
+        Edit
+      </button>
+    </div>
+  </form>
+</div>

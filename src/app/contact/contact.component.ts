@@ -59,7 +59,7 @@ export class ContactComponent {
   ngOnInit() {
   }
   ngAfterViewInit() {
-
+    
     this.commonService.loaderVisibility$.subscribe((res) => {
       this.loaderVisibility = res;
       this.cdr.detectChanges();

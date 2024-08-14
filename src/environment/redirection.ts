@@ -17,5 +17,8 @@ export const  APIURL = {
     AddCategory:"category/addcategory",
     login:"login",
     getCountry:'common/getcountries',
-    Register:'register'
+    Register:'register',
+    myProfile:'myprofile',
+    updateProfile:'updateprofile',
+    getProductByCategoryId:'product/getproductbycategory'
 }

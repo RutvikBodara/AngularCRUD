@@ -43,6 +43,10 @@ export class ProductMatComponent  {
   deleteId:number;
   deleteDataSubscription :Subscription;
   searchTerms;
+  passedData;
+  expandableGrid:boolean=false
+  actionBtnAllowed :boolean =true;
+  paginationAllowed:boolean=true;
   constructor(private dialog:MatDialog,private router:Router,private _liveAnnouncer: LiveAnnouncer,private componentServices :ComponentService,private commonService : CommonService) {}
 
   // @ViewChild(MatSort) sort: MatSort;
@@ -167,7 +171,7 @@ export class ProductMatComponent  {
   // }
   
   getProduct(){
-    this.getProductSubscription = this.componentServices.get<string>(APIURL.getProduct,null,null,null,null,this.commonSearch,this.sortedcolumn,this.sorteddirection,this.pagenumber,this.pagesize).pipe(retryWhen(arr => arr.pipe(delay(10000), scan((retryCount) =>{
+    this.getProductSubscription = this.componentServices.get<string>(APIURL.getProduct,null,null,null,null,this.commonSearch,this.sortedcolumn,this.sorteddirection,this.pagenumber,this.pagesize).pipe(retryWhen(arr => arr.pipe(delay(1000), scan((retryCount) =>{
       // retryCount = retryCount + 1;
       // console.log(retryCount)
       if(this.retryCount % 2 == 0){
@@ -205,7 +209,7 @@ export class ProductMatComponent  {
           // )
           this.convertToMatTableDataSource(result)
           this.paginatorLength = result.dataCount
-          console.log(result.responseData)
+          this.passedData = result.responseData
           this.dataSource =new MatTableDataSource(result.responseData);
         }
       }

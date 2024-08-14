@@ -6,3 +6,9 @@ svg:hover{
     font-weight: 600;
     color: white;
 }
+.expand-row{
+    height: 0;
+}
+.child-grid{
+    margin: 20px;
+}

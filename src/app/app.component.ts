@@ -55,14 +55,16 @@ export class AppComponent {
     // this.backgroundUnSubscribe.unsubscribe()
   }
   addCallAnimation(event :MouseEvent):void{
-    const newCall ={top:event.clientY, left:event.clientX}
-    this.calls.push(newCall);
-
-    setTimeout(() => {
-      const index = this.calls.indexOf(newCall);
-      if (index !== -1) {
-        this.calls.splice(index, 1);
-      }
-    },50);
+    if(window.innerWidth - event.clientX  >15 && window.innerHeight - event.clientY >15){
+      const newCall ={top:event.clientY, left:event.clientX}
+      this.calls.push(newCall);
+      setTimeout(() => {
+        const index = this.calls.indexOf(newCall);
+        if (index !== -1) {
+          this.calls.splice(index, 1);
+        }
+      },50);
+    }
+    
   }
 }

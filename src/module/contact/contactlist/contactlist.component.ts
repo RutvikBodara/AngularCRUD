@@ -73,6 +73,9 @@ export class ContactlistComponent {
   searchStringSubscription;
   searchTypeSubscription;
   combineLatestSubscription: Subscription;
+  expandableGrid:boolean=false;
+  actionBtnAllowed :boolean =true;
+  paginationAllowed:boolean=true;
 
   ngOnInit() {
     // this.getContact()

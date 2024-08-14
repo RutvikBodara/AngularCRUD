@@ -64,7 +64,7 @@ export class CategoryComponent {
     dataSource;
     errorMessage="no data found"
   // // @ViewChild(MatPaginator) paginator: MatPaginator;
-  
+
   ngOnInit(){
     // this.getContact()
     this.commonService.updatePage("Category")
@@ -92,8 +92,7 @@ export class CategoryComponent {
       exitAnimationDuration,
     });
   }
-
-
+  
   getCategory(){
     this.componentServices.get<string>(APIURL.getCategory,null,null,null,null,this.commonSearch).subscribe(
       (result:result<string>)=>{
