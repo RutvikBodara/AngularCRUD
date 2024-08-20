@@ -16,7 +16,12 @@ export class genericResponeDemo<T>{
     message:string
     responseData:T
     maxPage?
+    columnCredits?:columnFields[]
     dataCount?
+}
+export class columnFields {
+    columnName:string
+    isEditable:boolean
 }
 
 export class LoginDataResponse<T>{

@@ -7,7 +7,7 @@ import { catchError, delay, retryWhen, scan, Subscription, throwError } from 'rx
 import { ComponentService } from '../../../services/component.service';
 import { APIURL } from '../../../environment/redirection';
 import { CommonService } from '../../../services/common.service';
-import { genericResponeDemo, product, result } from '../../../interface/result';
+import { columnFields, genericResponeDemo, product, result } from '../../../interface/result';
 import { DatePipe } from '@angular/common';
 import { CommonTableGridComponent } from '../../common/common-table-grid/common-table-grid.component';
 import { Router } from '@angular/router';
@@ -44,9 +44,11 @@ export class ProductMatComponent  {
   deleteDataSubscription :Subscription;
   searchTerms;
   passedData;
+  editable:boolean=true
   expandableGrid:boolean=false
   actionBtnAllowed :boolean =true;
   paginationAllowed:boolean=true;
+  columnValues:columnFields[] ;
   constructor(private dialog:MatDialog,private router:Router,private _liveAnnouncer: LiveAnnouncer,private componentServices :ComponentService,private commonService : CommonService) {}
 
   // @ViewChild(MatSort) sort: MatSort;
@@ -70,6 +72,7 @@ export class ProductMatComponent  {
       }
     });
   }
+
 
   // ngAfterViewInit() {
 
@@ -96,22 +99,39 @@ export class ProductMatComponent  {
     this.getProduct();
   }
 
-  onEditButtonClick(data): void {
+  onEditButtonClick(data:product): void {
     // console.log(this.params.data)
-    this.commonService.updateProductDetails(data)
-    this.router.navigate(['/contact/editproduct'])
+    // this.commonService.updateProductDetails(data)
+    if(data.name && data.name.trim() !== "" && data.helplineNumber != null && data.helplineNumber.length == 10)
+    this.postEditProduct(data)
+    else
+    this.commonService.showAlert("validation error","name and helpline number must required, helpline number must be 10 digits","error")
+    // this.router.navigate(['/contact/editproduct'])
     // Access row data via this.params.data
-    console.log('Row Data:',data);
+    // console.log('Row Data:',data);
     // Or access specific field value
     // console.log('Specific Value:', this.params.data.fieldName);
   }
-  deletePopUp(id){
-    this.deleteId=id
+
+  postEditProduct(requestData) {
+    this.componentServices
+      .updateProduct(requestData, APIURL.editProduct)
+      .subscribe((res) => {
+        if (res.code == 100) {
+          this.commonService.showSnackBar('product edited');
+          this.commonService.navigateOnSamePage()
+        } else {
+          this.commonService.showSnackBar(res.message.toString());
+        }
+      });
+  }
+  deletePopUp(data){
+    this.deleteId=data.id;
     this.commonService.updateDeleteTagLine("once you delete product,this product no longer")
     this.commonService.updateDeleteTitle("Delete Product?")
     this.openDeleteDialog('0','0');
   }
-
+  // this is what i wanna say 
   ngOnDestroy(){
     this.deleteDataSubscription.unsubscribe()
   }
@@ -195,7 +215,6 @@ export class ProductMatComponent  {
         }
         return throwError(() => err);
       }),
-
     ).subscribe(
       (result:genericResponeDemo<product[]>)=>{
         if(result.code == 106){
@@ -207,9 +226,10 @@ export class ProductMatComponent  {
           //   products.image = this.blobToFile(products.image,products.imagename)
           // }
           // )
-          this.convertToMatTableDataSource(result)
+          // this.convertToMatTableDataSource(result)
           this.paginatorLength = result.dataCount
           this.passedData = result.responseData
+          this.columnValues=result.columnCredits
           this.dataSource =new MatTableDataSource(result.responseData);
         }
       }
@@ -217,6 +237,5 @@ export class ProductMatComponent  {
   }
 
   convertToMatTableDataSource(data){
-    console.log(data)
   }
 }

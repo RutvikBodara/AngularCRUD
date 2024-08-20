@@ -22,7 +22,6 @@ import { catchError, delay, exhaustMap, of } from 'rxjs';
   styleUrl: './edit-category.component.css'
 })
 export class EditCategoryComponent {
-  
   constructor(private dialogRef:MatDialogRef<EditCategoryComponent>,private formbuilderinstance:FormBuilder, private router:Router,private commonService:CommonService,private componentService:ComponentService){}
   CategoryForm: FormGroup;
   CategoryDetails:category;

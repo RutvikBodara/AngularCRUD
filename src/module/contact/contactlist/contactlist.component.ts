@@ -2,6 +2,7 @@ import { Component, Input, input } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { ComponentService } from '../../../services/component.service';
 import {
+  columnFields,
   genericResponeDemo,
   responseData,
   result,
@@ -76,7 +77,7 @@ export class ContactlistComponent {
   expandableGrid:boolean=false;
   actionBtnAllowed :boolean =true;
   paginationAllowed:boolean=true;
-
+  columnValues:columnFields[]
   ngOnInit() {
     // this.getContact()
     this.commonService.updatePage('Dashboard');
@@ -187,6 +188,7 @@ export class ContactlistComponent {
             console.log(result);
             this.dataSource = result.responseData;
             this.dataSourceCount = result.dataCount;
+            this.columnValues=result.columnCredits
           }
         },
         (error) => {
@@ -200,7 +202,7 @@ export class ContactlistComponent {
     this.editedRowIndex = index;
     this.editedRow = row;
   }
-
+  
   cancelEdit() {
     this.editedRowIndex = -1;
   }
@@ -226,10 +228,9 @@ export class ContactlistComponent {
     );
   }
 
-  deleteContact(id: number) {
+  deleteContact(data) {
     //show popup
-
-    this.componentServices.delete<string>(id, APIURL.deleteContact).subscribe(
+    this.componentServices.delete<string>(data.id, APIURL.deleteContact).subscribe(
       (result) => {
         if (result.code == 106) {
           this.commonService.showSnackBar(result.message);

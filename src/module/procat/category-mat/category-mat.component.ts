@@ -6,7 +6,7 @@ import { CommonService } from '../../../services/common.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ComponentService } from '../../../services/component.service';
 import { APIURL } from '../../../environment/redirection';
-import { genericResponeDemo, product, result } from '../../../interface/result';
+import { columnFields, genericResponeDemo, product, result } from '../../../interface/result';
 import { NewCategoryComponent } from '../new-category/new-category.component';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
@@ -25,6 +25,7 @@ import { DeleteCategoryComponent } from '../category/action-menu/delete-category
 import { category } from '../../../interface/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material/table';
+import { DeleteProductDialogComponent } from '../product/action-menu/delete-product-dialog/delete-product-dialog.component';
 @Component({
   selector: 'app-category-mat',
   standalone: true,
@@ -47,6 +48,8 @@ export class CategoryMatComponent {
   deleteId: number;
   childTable?;
   childPaginatorLength = 0;
+  columnValues:columnFields[]
+  childColumnValues:columnFields[]
   deleteDataSubscription: Subscription;
   displayedColumns: string[] = [
     'id',
@@ -91,10 +94,38 @@ export class CategoryMatComponent {
         this.getCategory();
       }
     );
+
+    this.deleteDataSubscription= this.commonService.deleteData$.subscribe((Res : Boolean)=>{
+      if(Res){
+        this.deleteCategory()
+      }
+    });
   }
 
+  deleteCategory(){
+    this.componentServices.delete<string>(this.deleteId,APIURL.deleteCategory).subscribe(
+      (res)=>{
+        if(res.code  == 100){
+          this.commonService.showSnackBar(res.message + "deleted success")
+          this.commonService.navigateOnSamePage()
+          this.commonService.deleteDataChange(false);
+        }
+        else{
+          this.commonService.deleteDataChange(false);
+          this.commonService.showSnackBar(res.message)
+        }
+
+      },
+      (error)=>{
+        console.error(error);
+      }
+    )
+
+  }
+  
   ngOnDestroy() {
     this.searchStringSubscription.unsubscribe();
+    this.deleteDataSubscription.unsubscribe();
   }
 
   // announceSortChange(sortState: Sort) {
@@ -139,6 +170,8 @@ export class CategoryMatComponent {
 
   onEditButtonClick(data): void {
     // console.log(this.params.data)
+    console.log("hey")
+    console.log(data)
     this.commonservice.updateCategory(data);
     this.openEditDialog('0ms', '0ms');
     // Access row data via this.params.data
@@ -147,12 +180,14 @@ export class CategoryMatComponent {
     // console.log('Specific Value:', this.params.data.fieldName);
   }
 
-  deletePopUp(id) {
-    this.deleteId = id;
+  deletePopUp(data) {
+
+    this.deleteId = data.id;
+    this.commonservice.updateCategory(data);
     this.commonService.updateDeleteTagLine(
-      'once you delete product,this product no longer'
+      'once you delete category,this category no longer available'
     );
-    this.commonService.updateDeleteTitle('Delete Product?');
+    this.commonService.updateDeleteTitle('Delete Category?');
     this.openDeleteDialog('0', '0');
   }
 
@@ -215,6 +250,8 @@ export class CategoryMatComponent {
           // )
           // this.paginatorLength = result.dataCount
           this.childPaginatorLength = result.responseData.length ? 1 : 0;
+          this.childColumnValues=result.columnCredits;
+          console.log(result)
           this.childTable = new MatTableDataSource(result.responseData);
         }
       });
@@ -266,6 +303,7 @@ export class CategoryMatComponent {
           // }
           // )
           this.paginatorLength = result.dataCount;
+          this.columnValues=result.columnCredits
           this.dataSource = new MatTableDataSource(result.responseData);
         }
       });

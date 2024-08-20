@@ -8,6 +8,7 @@ import {
   Output,
   Pipe,
   PipeTransform,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
@@ -21,20 +22,35 @@ import { delay, retryWhen, scan, Subscription } from 'rxjs';
 import { ComponentService } from '../../../services/component.service';
 import { APIURL } from '../../../environment/redirection';
 import { CommonService } from '../../../services/common.service';
-import { genericResponeDemo, product, result } from '../../../interface/result';
+import {
+  columnFields,
+  genericResponeDemo,
+  product,
+  result,
+} from '../../../interface/result';
 import { CommonModule, DatePipe } from '@angular/common';
 import { DeleteProductDialogComponent } from '../../procat/product/action-menu/delete-product-dialog/delete-product-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { MatGridListModule } from '@angular/material/grid-list';
-
+import { leadingComment } from '@angular/compiler';
 
 @Component({
   selector: 'app-common-table-grid',
@@ -53,7 +69,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatIconModule,
     FormsModule,
     MatButtonModule,
-    MatGridListModule
+    MatGridListModule,
   ],
   templateUrl: './common-table-grid.component.html',
   styleUrl: './common-table-grid.component.css',
@@ -61,7 +77,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', visibility: 'hidden' })),
       state('expanded', style({ height: '*', visibility: 'visible' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
   ],
 })
@@ -81,26 +100,35 @@ export class CommonTableGridComponent {
   searchStringSubscription: Subscription;
   getProductSubscription: Subscription;
   currentIndex = 0;
+
+  editedRowIndex;
+  editedRow;
+
+  @Input()
+  editable?: boolean = false;
+
   countrow: number;
   @Input()
-  IsparentComponent?:boolean =true;
+  IsparentComponent?: boolean = true;
 
   @Input()
-  IsChildComponent?:boolean;
+  IsChildComponent?: boolean;
 
-  lengthColumn:number;
+  @Input()
+  isthisChild?: boolean = false;
+
+  lengthColumn: number;
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
   @Input()
-  displayedColumns: string[];
+  displayedColumns: string[]=[];
 
   @Input()
-  childDisplayColumns? :string[];
-   
+  childDisplayColumns?: string[];
 
   @Input()
   data;
-  
+
   @Input()
   paginatorLength;
 
@@ -109,64 +137,102 @@ export class CommonTableGridComponent {
 
   @Input()
   expandableGrid: boolean = false;
-  
-  @Input()
-  paginationAllowed : boolean =false;
 
   @Input()
-  actionBtnAllowed :boolean = false;
+  paginationAllowed: boolean = false;
+
+  @Input()
+  actionBtnAllowed: boolean = false;
+
   pageNumber;
-  
+
   retryCount: number = 1;
-  
+
   pagenumber: number;
   @Input()
   pagesize: number;
 
-  @Input() 
+  @Input()
+  childColumnValues?:columnFields[]
+  
+  @Input()
   childTable?;
+
+  @Input()
+  columnValues: columnFields[];
 
   sortedcolumn: string;
   sorteddirection: string;
-  expandedElement ;
+  expandedElement;
+  
+
   @Output()
   paginationChanged: EventEmitter<number[]> = new EventEmitter<number[]>();
-  
+
   @Output()
   orderChanged: EventEmitter<string[]> = new EventEmitter<string[]>();
-  
+
+  @Output()
+  upDatedEditValue =new EventEmitter()
+
   @Output()
   potentialEdit = new EventEmitter();
-  
+
   @Output()
   deleteIdEmit: EventEmitter<number> = new EventEmitter<number>();
 
   @Output()
   getChildTableDataEmit = new EventEmitter();
+
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
     private componentServices: ComponentService,
     private commonService: CommonService,
     private dialog: MatDialog
   ) {}
-  
-  @ViewChild(MatSort) sort: MatSort;
-  
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  
-  ngOnInit() {
 
- 
+  @ViewChild(MatSort) sort: MatSort;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['columnValues']) {
+      console.log(changes['columnValues'].currentValue);
+      if (changes['columnValues'].currentValue != null) {
+        this.displayedColumns=[]
+        changes['columnValues'].currentValue.forEach((element) => {
+          this.displayedColumns.push(element.columnName)
+        });
+      }
+    }
+  }
+
+  ngOnInit() {
     // this.data = this.data;
     // this.data = new MatTableDataSource(this.data);
-    console.log(this.data)
-    console.log(this.childTable)
-    this.lengthColumn = this.displayedColumns.length
+    console.log(this.data);
+    console.log(this.childTable);
+    // this.lengthColumn = this.displayedColumns.length;
+
     // this.paginator.length =this.paginatorLength;
   }
-  
+
+  startEdit(row, index) {
+    this.editedRowIndex = index;
+    this.editedRow = row;
+  }
+
+  cancelEdit() {
+    this.editedRowIndex = -1;
+  }
+  saveUpdate(){
+    if(this.editedRow != null){
+      this.potentialEdit.emit(this.editedRow);
+    }
+  }
+
   ngAfterViewInit() {
-    if(this.paginator){
+    if (this.paginator) {
       this.paginator.page.subscribe((event: PageEvent) => {
         console.log('Page Index:', event.pageIndex);
         this.pagenumber = event.pageIndex + 1;
@@ -174,15 +240,15 @@ export class CommonTableGridComponent {
         this.paginationChanged.emit([this.pagenumber, this.pagesize]);
       });
     }
-      // this.dataSource.paginator = this.paginator;
+    // this.dataSource.paginator = this.paginator;
     // this.data.sort = this.sort;
   }
 
   toggleRow(element) {
-    console.log(element === this.expandedElement)
+    console.log(element)
     this.expandedElement = this.expandedElement === element ? null : element;
-    if(this.expandableGrid){
-      this.getChildTableDataEmit.emit(this.expandedElement)
+    if (this.expandableGrid) {
+      this.getChildTableDataEmit.emit(this.expandedElement);
     }
   }
 
@@ -207,7 +273,7 @@ export class CommonTableGridComponent {
     // const previousIndex = this.dataSource.findIndex((d) => d === event.item.data);
     moveItemInArray(this.data, event.previousIndex, event.currentIndex);
   }
-  
+
   setStep(index: number) {
     this.currentIndex = index;
   }
@@ -219,10 +285,16 @@ export class CommonTableGridComponent {
   prevStep() {
     this.currentIndex--;
   }
+
   
-  onEditButtonClick(data): void {
+  onEditButtonClick(data,index): void {
+    if(this.editable){
+      this.startEdit(data,index)
+    }
+    else{
+      this.potentialEdit.emit(data);
+    }
     //give data back to parent
-    this.potentialEdit.emit(data);
   }
 
   onDeleteButtonClick(data): void {
@@ -243,7 +315,7 @@ export class CommonTableGridComponent {
   isDateColumn(column: string): boolean {
     // Define your logic to identify date columns
     // For example, you might have a list of date columns
-    const dateColumns = ['updatedDate', 'createddate','createdDate']; // Adjust based on your data
+    const dateColumns = ['updatedDate', 'createddate', 'createdDate']; // Adjust based on your data
     return dateColumns.includes(column);
   }
 

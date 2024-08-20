@@ -74,5 +74,17 @@
   </div>
 </ng-template> -->
 
-<app-common-table-grid  [displayedColumns]="displayedColumns" [actionBtnAllowed]="actionBtnAllowed" [expandableGrid]="expandableGrid" [data]="dataSource" [paginatorLength]=" dataSourceCount" [paginationAllowed]="paginationAllowed" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (deleteIdEmit)="deleteContact($event)" (potentialEdit)="editContact($event)"  >
+<!-- [displayedColumns]="displayedColumns" -->
+<app-common-table-grid
+  [columnValues]="columnValues"
+  [actionBtnAllowed]="actionBtnAllowed"
+  [expandableGrid]="expandableGrid"
+  [data]="dataSource"
+  [paginatorLength]="dataSourceCount"
+  [paginationAllowed]="paginationAllowed"
+  (paginationChanged)="paginationChanged($event)"
+  (orderChanged)="orderChanged($event)"
+  (deleteIdEmit)="deleteContact($event)"
+  (potentialEdit)="editContact($event)"
+>
 </app-common-table-grid>

@@ -19,34 +19,37 @@ export class DeleteCategoryComponent {
   CategoryDetails:category;
   delete(){
     this.commonService.categoryDetails$.subscribe((res)=>{
+      console.log(res)
       this.CategoryDetails = res
     });
     if(this.CategoryDetails.totalProducts  > 0){
       this.commonService.showSnackBar("can not delete because this category contains products")
-      this.dialogRef.close()
+      // this.dialogRef.close()
     }
     else{
-      this.deleteProduct();
+      this.commonService.deleteDataChange(true);
+      // this.deleteProduct();
     }
+    this.dialogRef.close()
   }
-  deleteProduct(){
-    this.componentService.delete<string>(this.CategoryDetails.id,APIURL.deleteCategory).subscribe(
-      (res)=>{
-        if(res.code  == 100){
-          this.commonService.showSnackBar(res.message + "deleted success")
-          this.dialogRef.close()
-          this.commonService.navigateOnSamePage()
-        }
-        else{
-          this.commonService.showSnackBar(res.message)
-        }
+  // deleteProduct(){
+  //   this.componentService.delete<string>(this.CategoryDetails.id,APIURL.deleteCategory).subscribe(
+  //     (res)=>{
+  //       if(res.code  == 100){
+  //         this.commonService.showSnackBar(res.message + "deleted success")
+  //         this.dialogRef.close()
+  //         this.commonService.navigateOnSamePage()
+  //       }
+  //       else{
+  //         this.commonService.showSnackBar(res.message)
+  //       }
 
-      },
-      (error)=>{
-        console.error(error);
-      }
-    )
+  //     },
+  //     (error)=>{
+  //       console.error(error);
+  //     }
+  //   )
 
-  }
+  // }
 
 }

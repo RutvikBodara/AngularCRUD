@@ -31,7 +31,6 @@ export class DeleteProductDialogComponent {
   }
   delete(){
     // want id here to transmit
-    console.log("hey hii")
     this.commonService.deleteDataChange(true);
     this.dialogRef.close()
   }

@@ -1,13 +1,12 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { equal } from 'assert';
 import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ThisReceiver } from '@angular/compiler';
 import { product } from '../interface/result';
 import { Router } from '@angular/router';
 import { category } from '../interface/common';
 import Swal from 'sweetalert2';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,7 +20,6 @@ export class CommonService {
   // searchstring$ = this.searchValue.asObservable()
   //subject example
   // private demoSubject : Subject<string> = new Subject();
-
   //replay subject
 
   private currentPage: BehaviorSubject<string> = new BehaviorSubject<string>(
@@ -29,8 +27,9 @@ export class CommonService {
   );
   currentPage$ = this.currentPage.asObservable();
 
-  private backgroundColor : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  backgroundColor$ = this.backgroundColor.asObservable()
+  private backgroundColor: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(true);
+  backgroundColor$ = this.backgroundColor.asObservable();
 
   private serchContactType: BehaviorSubject<string> =
     new BehaviorSubject<string>(null);
@@ -54,13 +53,14 @@ export class CommonService {
   loaderVisibility$ = this.loaderVisibility.asObservable();
 
   private deleteTagLine: BehaviorSubject<string> = new BehaviorSubject<string>(
-    'no data to delet'
+    'no data to delete'
   );
   deleteTagLine$ = this.deleteTagLine.asObservable();
 
   private deleteTitle: BehaviorSubject<string> = new BehaviorSubject<string>(
     'delete title'
   );
+
   deleteTitle$ = this.deleteTitle.asObservable();
 
   private deleteData: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
@@ -79,8 +79,8 @@ export class CommonService {
   LoaderVisibilityUpdate(visible: boolean) {
     this.loaderVisibility.next(visible);
   }
-  backgroundColorChange(value:boolean){
-    this.backgroundColor.next(value)
+  backgroundColorChange(value: boolean) {
+    this.backgroundColor.next(value);
   }
   updatesearch(value: number | string) {
     this.searchValue.next(value);
@@ -103,7 +103,7 @@ export class CommonService {
   updateCategory(cat: category) {
     this.categoryDetails.next(cat);
   }
-  showSnackBar(value: string,defaultclass = "success") {
+  showSnackBar(value: string, defaultclass = 'success') {
     this._snackBar.open(value, 'close', {
       duration: 3000,
       verticalPosition: 'top',
@@ -111,17 +111,21 @@ export class CommonService {
     });
   }
   setLocal(value: string, name: string): void {
-    const expirationTime = new Date().getTime() + (360000 *2 );
+    const expirationTime = new Date().getTime() + 360000 * 2;
     const item = {
       value: value,
       expirationTime: expirationTime,
     };
-    localStorage.setItem(name, JSON.stringify(item));
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(name, JSON.stringify(item));
+    }
   }
   getLocal(name: string) {
-    // if (isPlatformBrowser(this.platformId)) 
-      
-      return localStorage.getItem(name);
+    // if (isPlatformBrowser(this.platformId))
+    // if (isPlatformBrowser(this.platformId)) {
+    return localStorage.getItem(name);
+    // }
+    return null;
     // else return null;
   }
   removeLocal(name: string) {
@@ -158,13 +162,15 @@ export class CommonService {
   login(): void {}
 
   logout(): void {
-    this.removeLocal("jwt")
-    this.removeLocal("userName")
-    this.removeLocal("email")
+    // this.removeLocal('jwt');
+    // this.removeLocal('userName');
+    // this.removeLocal('email');
+    localStorage.clear();
+    //remove alll local values
   }
 
   isUserLoggedIn() {
-    const itemStr :string = this.getLocal("jwt")
+    const itemStr: string = this.getLocal('jwt');
     // console.log(itemStr)
 
     // if(itemStr == null){
@@ -175,15 +181,11 @@ export class CommonService {
     if (itemStr == null) {
       return false; // Item does not exist
     }
-
     try {
       const item = JSON.parse(itemStr);
-  
       const currentTime = new Date().getTime();
       if (currentTime > item.expirationTime) {
-       
-        this.removeLocal("jwt")
-
+        this.removeLocal('jwt');
         return false;
       }
       return true;
