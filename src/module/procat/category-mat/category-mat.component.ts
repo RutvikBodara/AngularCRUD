@@ -103,7 +103,7 @@ export class CategoryMatComponent {
   }
 
   deleteCategory(){
-    this.componentServices.delete<string>(this.deleteId,APIURL.deleteCategory).subscribe(
+    this.componentServices.delete<string>(APIURL.deleteCategory,this.deleteId).subscribe(
       (res)=>{
         if(res.code  == 100){
           this.commonService.showSnackBar(res.message + "deleted success")
@@ -181,7 +181,6 @@ export class CategoryMatComponent {
   }
 
   deletePopUp(data) {
-
     this.deleteId = data.id;
     this.commonservice.updateCategory(data);
     this.commonService.updateDeleteTagLine(

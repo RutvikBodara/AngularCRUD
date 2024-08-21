@@ -49,6 +49,9 @@ export class ProductMatComponent  {
   actionBtnAllowed :boolean =true;
   paginationAllowed:boolean=true;
   columnValues:columnFields[] ;
+  bulkDeleteEnable:boolean =true;
+  bulkDelete:boolean =false;
+  bulkDeleteData : number[];
   constructor(private dialog:MatDialog,private router:Router,private _liveAnnouncer: LiveAnnouncer,private componentServices :ComponentService,private commonService : CommonService) {}
 
   // @ViewChild(MatSort) sort: MatSort;
@@ -68,12 +71,17 @@ export class ProductMatComponent  {
       if(Res){
         console.log(Res)
         console.log("hey whats app")
-        this.deleteProduct()
+        if(this.bulkDelete){
+          this.deleteBulkProducts()
+        }
+        else{
+          this.deleteProduct()
+        }
       }
     });
   }
 
-
+  
   // ngAfterViewInit() {
 
   //   // this.paginator.page.subscribe((event: PageEvent) => {
@@ -125,11 +133,26 @@ export class ProductMatComponent  {
         }
       });
   }
+  onDeleteBulkProduct(deletedata:product[]){
+    console.log(deletedata)
+    // this.bulkDeleteData=deletedata;
+   this.bulkDeleteData = deletedata.map(item => item.id);
+   console.log(this.bulkDeleteData)
+    this.bulkDelete=true;
+    this.commonService.updateDeleteTagLine("once you delete selected products,this products no longer available to see")
+    this.commonService.updateDeleteTitle("Delete Products?")
+    this.commonDeletePopup()
+  }
+ 
+  commonDeletePopup(){
+    this.openDeleteDialog('0','0');
+  }
   deletePopUp(data){
+    this.bulkDelete =false;
     this.deleteId=data.id;
     this.commonService.updateDeleteTagLine("once you delete product,this product no longer")
     this.commonService.updateDeleteTitle("Delete Product?")
-    this.openDeleteDialog('0','0');
+    this.commonDeletePopup()
   }
   // this is what i wanna say 
   ngOnDestroy(){
@@ -143,14 +166,34 @@ export class ProductMatComponent  {
       exitAnimationDuration,
     });
   }
-  deleteProduct(){
-    console.log(this.deleteId)
-    this.componentServices.delete<string>(this.deleteId,APIURL.deleteProduct).subscribe(
+
+  deleteBulkProducts(){
+    this.componentServices.delete<string>(APIURL.deleteBulkProduct,null,this.bulkDeleteData).subscribe(
       (res)=>{
         if(res.code  == 100){
           this.commonService.showSnackBar(res.message + "deleted success")
           this.commonService.navigateOnSamePage()
           this.commonService.deleteDataChange(false);
+        }
+        else{
+          this.commonService.deleteDataChange(false);
+          this.commonService.showSnackBar(res.message)
+        }
+      },
+      (error)=>{
+        console.error(error);
+      }
+    )
+  }
+  deleteProduct(){
+    console.log(this.deleteId)
+    this.componentServices.delete<string>(APIURL.deleteProduct,this.deleteId).subscribe(
+      (res)=>{
+        if(res.code  == 100){
+          this.commonService.showSnackBar(res.message + "deleted success")
+          this.commonService.navigateOnSamePage()
+          this.commonService.deleteDataChange(false);
+          // this.commonService.clearSelectionUpdate(true);
         }
         else{
           this.commonService.deleteDataChange(false);

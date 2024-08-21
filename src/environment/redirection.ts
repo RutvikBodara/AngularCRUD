@@ -6,6 +6,7 @@ export const  APIURL = {
     deleteContact:"contacts/deletecontacts",
     deleteContacttype:"contacts/deletecontactstype",
     deleteProduct:"product/deleteproduct",
+    deleteBulkProduct:"product/deletebulkproduct",
     deleteCategory:"category/deletecategory",
     editContact:"contacts/updatecontacts",
     editContactType:"contacts/updatecontactstype",

@@ -115,11 +115,27 @@
 </mat-paginator> -->
 <ng-container ngIf="authorized; else unauthorized">
   <!-- [displayedColumns]="displayedColumns" -->
-  <app-common-table-grid [columnValues]="columnValues" [editable]="editable"  [data]="passedData" [paginatorLength]=" paginatorLength"  [expandableGrid]="expandableGrid"  [actionBtnAllowed]="actionBtnAllowed" [paginationAllowed]="paginationAllowed" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (paginationChanged)="paginationChanged($event)" (orderChanged)="orderChanged($event)" (deleteIdEmit)="deletePopUp($event)" (potentialEdit)="onEditButtonClick($event)">  
+  <app-common-table-grid
+    [columnValues]="columnValues"
+    [editable]="editable"
+    [dataSource]="passedData"
+    [paginatorLength]="paginatorLength"
+    [expandableGrid]="expandableGrid"
+    [actionBtnAllowed]="actionBtnAllowed"
+    [paginationAllowed]="paginationAllowed"
+    [bulkDeleteEnable]="bulkDeleteEnable"
+    (paginationChanged)="paginationChanged($event)"
+    (orderChanged)="orderChanged($event)"
+    (paginationChanged)="paginationChanged($event)"
+    (orderChanged)="orderChanged($event)"
+    (deleteIdEmit)="deletePopUp($event)"
+    (potentialEdit)="onEditButtonClick($event)"
+    (selectedDeleteBulk)="onDeleteBulkProduct($event)"
+  >
   </app-common-table-grid>
 </ng-container>
 <ng-template #unauthorized>
   <h2>
-    {{errorMessage}}
+    {{ errorMessage }}
   </h2>
 </ng-template>

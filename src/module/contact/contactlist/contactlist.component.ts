@@ -230,7 +230,7 @@ export class ContactlistComponent {
 
   deleteContact(data) {
     //show popup
-    this.componentServices.delete<string>(data.id, APIURL.deleteContact).subscribe(
+    this.componentServices.delete<string>(APIURL.deleteContact,data.id).subscribe(
       (result) => {
         if (result.code == 106) {
           this.commonService.showSnackBar(result.message);

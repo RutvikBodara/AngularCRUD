@@ -68,12 +68,22 @@ export class CommonService {
   );
   deleteData$ = this.deleteData.asObservable();
 
+  private clearSelection :BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
+  clearSelection$ = this.clearSelection.asObservable();
+
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private _snackBar: MatSnackBar,
     private router: Router
   ) {
     // const localStorage = document.defaultView?.localStorage;
+  }
+
+  clearSelectionUpdate(value:boolean){
+    this.clearSelection.next(value);
   }
 
   LoaderVisibilityUpdate(visible: boolean) {
@@ -111,7 +121,8 @@ export class CommonService {
     });
   }
   setLocal(value: string, name: string): void {
-    const expirationTime = new Date().getTime() + 360000 * 2;
+    //around 1 hour 
+    const expirationTime = new Date().getTime() + 1000000*4;
     const item = {
       value: value,
       expirationTime: expirationTime,

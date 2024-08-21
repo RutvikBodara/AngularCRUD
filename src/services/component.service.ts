@@ -65,11 +65,15 @@ export class ComponentService {
     return this.http.get(suburl,{params:parameters}).pipe(shareReplay())
   }
 
-  delete<T>(id:number,suburl:string){
+  delete<T>(suburl:string,id?:number,idlist?:number[]){
     let parameters =new HttpParams()
     if(id != undefined && id != null && id > 0){
       parameters=parameters.set("id",id)
     }
+    if(idlist != undefined && idlist != null){
+      parameters=parameters.set("idlist",idlist.toString())
+    }
+    
     console.log(parameters)
     return this.http.delete<result<T>>(suburl,{params:parameters}).pipe(shareReplay())
   }

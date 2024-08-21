@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import {
   MatPaginator,
   MatPaginatorModule,
@@ -51,6 +52,7 @@ import {
 } from '@angular/animations';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { leadingComment } from '@angular/compiler';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-common-table-grid',
@@ -70,7 +72,9 @@ import { leadingComment } from '@angular/compiler';
     FormsModule,
     MatButtonModule,
     MatGridListModule,
+    MatCheckboxModule,
   ],
+  
   templateUrl: './common-table-grid.component.html',
   styleUrl: './common-table-grid.component.css',
   animations: [
@@ -112,6 +116,9 @@ export class CommonTableGridComponent {
   IsparentComponent?: boolean = true;
 
   @Input()
+  bulkDeleteEnable?: boolean = false;
+
+  @Input()
   IsChildComponent?: boolean;
 
   @Input()
@@ -121,13 +128,13 @@ export class CommonTableGridComponent {
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
   @Input()
-  displayedColumns: string[]=[];
+  displayedColumns: string[] = [];
 
   @Input()
   childDisplayColumns?: string[];
 
   @Input()
-  data;
+  dataSource;
 
   @Input()
   paginatorLength;
@@ -153,8 +160,8 @@ export class CommonTableGridComponent {
   pagesize: number;
 
   @Input()
-  childColumnValues?:columnFields[]
-  
+  childColumnValues?: columnFields[];
+
   @Input()
   childTable?;
 
@@ -164,7 +171,6 @@ export class CommonTableGridComponent {
   sortedcolumn: string;
   sorteddirection: string;
   expandedElement;
-  
 
   @Output()
   paginationChanged: EventEmitter<number[]> = new EventEmitter<number[]>();
@@ -173,7 +179,7 @@ export class CommonTableGridComponent {
   orderChanged: EventEmitter<string[]> = new EventEmitter<string[]>();
 
   @Output()
-  upDatedEditValue =new EventEmitter()
+  upDatedEditValue = new EventEmitter();
 
   @Output()
   potentialEdit = new EventEmitter();
@@ -183,6 +189,9 @@ export class CommonTableGridComponent {
 
   @Output()
   getChildTableDataEmit = new EventEmitter();
+
+  @Output()
+  selectedDeleteBulk = new EventEmitter();
 
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
@@ -197,23 +206,27 @@ export class CommonTableGridComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['columnValues']) {
-      console.log(changes['columnValues'].currentValue);
       if (changes['columnValues'].currentValue != null) {
-        this.displayedColumns=[]
+        this.displayedColumns = [];
         changes['columnValues'].currentValue.forEach((element) => {
-          this.displayedColumns.push(element.columnName)
+          this.displayedColumns.push(element.columnName);
         });
       }
     }
   }
 
   ngOnInit() {
+    // this.commonService.clearSelection$.subscribe((Res)=>{
+    //   if(Res){
+    //     this.selection.clear();
+    //     this.commonService.clearSelectionUpdate(false);
+    //   }
+    // })
     // this.data = this.data;
     // this.data = new MatTableDataSource(this.data);
-    console.log(this.data);
-    console.log(this.childTable);
+    // console.log(this.data);
+    // console.log(this.childTable);
     // this.lengthColumn = this.displayedColumns.length;
-
     // this.paginator.length =this.paginatorLength;
   }
 
@@ -225,8 +238,8 @@ export class CommonTableGridComponent {
   cancelEdit() {
     this.editedRowIndex = -1;
   }
-  saveUpdate(){
-    if(this.editedRow != null){
+  saveUpdate() {
+    if (this.editedRow != null) {
       this.potentialEdit.emit(this.editedRow);
     }
   }
@@ -237,6 +250,7 @@ export class CommonTableGridComponent {
         console.log('Page Index:', event.pageIndex);
         this.pagenumber = event.pageIndex + 1;
         this.pagesize = event.pageSize;
+        this.selection.clear();
         this.paginationChanged.emit([this.pagenumber, this.pagesize]);
       });
     }
@@ -244,8 +258,48 @@ export class CommonTableGridComponent {
     // this.data.sort = this.sort;
   }
 
+  selection = new SelectionModel<any>(true, []);
+
+  // Method to determine if all rows are selected
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.length;
+    return numSelected === numRows;
+  }
+
+  // Method to determine if some (but not all) rows are selected
+  isAnySelectedButNotAll() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.length;
+    return numSelected > 0 && numSelected < numRows;
+  }
+
+  // Method to toggle all row selections
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      console.log('else');
+      console.log(this.dataSource);
+      this.dataSource.forEach((row) => this.selection.select(row));
+    }
+  }
+
+  // Method to toggle selection for an individual row
+  toggleSelection(row: any) {
+    this.selection.toggle(row);
+  }
+
+  // Method to delete selected rows
+  deleteSelected() {
+    const selectedRows = this.selection.selected;
+    console.log(selectedRows);
+    this.selectedDeleteBulk.emit(selectedRows);
+    //  this.selection.clear()
+    // this.dataSource = this.dataSource.filter(row => !selectedRows.includes(row));
+  }
+
   toggleRow(element) {
-    console.log(element)
     this.expandedElement = this.expandedElement === element ? null : element;
     if (this.expandableGrid) {
       this.getChildTableDataEmit.emit(this.expandedElement);
@@ -254,8 +308,8 @@ export class CommonTableGridComponent {
 
   // int? pagenumber, int? pagesize, string? sortedcolumn, string? sorteddirection
   announceSortChange(sortState: Sort) {
+    console.log('i am sorted');
     if (sortState.direction) {
-      console.log(sortState.direction);
       this.sortedcolumn = sortState.active;
       this.sorteddirection = sortState.direction;
       this.orderChanged.emit([this.sortedcolumn, this.sorteddirection]);
@@ -271,7 +325,7 @@ export class CommonTableGridComponent {
 
   drop(event: CdkDragDrop<any[]>) {
     // const previousIndex = this.dataSource.findIndex((d) => d === event.item.data);
-    moveItemInArray(this.data, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
   }
 
   setStep(index: number) {
@@ -286,12 +340,10 @@ export class CommonTableGridComponent {
     this.currentIndex--;
   }
 
-  
-  onEditButtonClick(data,index): void {
-    if(this.editable){
-      this.startEdit(data,index)
-    }
-    else{
+  onEditButtonClick(data, index): void {
+    if (this.editable) {
+      this.startEdit(data, index);
+    } else {
       this.potentialEdit.emit(data);
     }
     //give data back to parent

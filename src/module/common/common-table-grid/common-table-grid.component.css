@@ -12,3 +12,9 @@ svg:hover{
 .child-grid{
     margin: 20px;
 }
+.my-checkbox {
+    transform: scale(1.4);
+}
+/* .child-checkbox{
+    transform: scale(1.2);
+} */

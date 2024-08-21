@@ -23,6 +23,8 @@
     "@angular/platform-server": "^17.3.0",
     "@angular/router": "^17.3.0",
     "@angular/ssr": "^17.3.7",
+    "@ngxs/logger-plugin": "^18.1.1",
+    "@ngxs/store": "^18.1.1",
     "@sweetalert2/ngx-sweetalert2": "^12.4.0",
     "ag-grid-angular": "^32.0.2",
     "ag-grid-community": "^32.0.2",
@@ -31,7 +33,7 @@
     "json-server": "^1.0.0-beta.1",
     "localstorage-polyfill": "^1.0.1",
     "rxjs": "~7.8.0",
-    "sweetalert2": "^11.12.4",
+    "sweetalert2": "^11.6.13",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },

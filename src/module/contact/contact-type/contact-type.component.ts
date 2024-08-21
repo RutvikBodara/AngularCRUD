@@ -117,7 +117,7 @@ export class ContactTypeComponent {
       this.commonService.showSnackBar("this list has a contacts")
     }
     else{
-      this.componentServices.delete<string>(row.id,APIURL.deleteContacttype).subscribe(
+      this.componentServices.delete<string>(APIURL.deleteContacttype,row.id).subscribe(
         ()=>{
           this.getContactType()
           this.commonService.showSnackBar("deleted record successfully")

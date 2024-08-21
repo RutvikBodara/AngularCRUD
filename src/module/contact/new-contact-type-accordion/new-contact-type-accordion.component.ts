@@ -184,7 +184,7 @@ export class NewContactTypeAccordionComponent {
       );
     } else {
       this.componentServices
-        .delete<string>(row.id, APIURL.deleteContacttype)
+        .delete<string>(APIURL.deleteContacttype,row.id)
         .subscribe(
           () => {
             this.getContactType();
