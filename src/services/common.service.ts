@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { category } from '../interface/common';
 import Swal from 'sweetalert2';
 import { isPlatformBrowser } from '@angular/common';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Injectable({
   providedIn: 'root',
@@ -204,5 +206,27 @@ export class CommonService {
       console.error('Error parsing localStorage item', e);
       return false;
     }
+  }
+
+  generateExcel(data: any[]): string {
+    // Create a new workbook
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    // Generate Excel file as base64 string
+    const wbout: string = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+    return wbout;
+  }
+
+  downloadExcel(base64String: string, fileName: string): void {
+    const binary = atob(base64String);
+    const arrayBuffer = new ArrayBuffer(binary.length);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < binary.length; i++) {
+      view[i] = binary.charCodeAt(i);
+    }
+    const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
+    saveAs(blob, `${fileName}.xlsx`);
   }
 }

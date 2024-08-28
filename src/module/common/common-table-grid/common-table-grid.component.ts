@@ -74,7 +74,7 @@ import { SelectionModel } from '@angular/cdk/collections';
     MatGridListModule,
     MatCheckboxModule,
   ],
-  
+
   templateUrl: './common-table-grid.component.html',
   styleUrl: './common-table-grid.component.css',
   animations: [
@@ -99,6 +99,7 @@ export class CommonTableGridComponent {
   //     value = value.replace(regex, "<span class='highlight-search-text'>" + text + "</span>");
   //   }
   // }
+
   commonSearch = null;
   errorMessage: String = 'No Data Found';
   searchStringSubscription: Subscription;
@@ -152,6 +153,7 @@ export class CommonTableGridComponent {
   actionBtnAllowed: boolean = false;
 
   pageNumber;
+  // this is page number which is not include in the given common grid
 
   retryCount: number = 1;
 
@@ -167,6 +169,9 @@ export class CommonTableGridComponent {
 
   @Input()
   columnValues: columnFields[];
+
+  @Input()
+  download:boolean = false;
 
   sortedcolumn: string;
   sorteddirection: string;
@@ -193,12 +198,37 @@ export class CommonTableGridComponent {
   @Output()
   selectedDeleteBulk = new EventEmitter();
 
+  @Output()
+  excelDownLoad = new EventEmitter();
+
+  @Output()
+  exportPDF = new EventEmitter();
+
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
     private componentServices: ComponentService,
     private commonService: CommonService,
     private dialog: MatDialog
   ) {}
+
+  downloadPdf():void{
+    this.exportPDF.emit(true);
+  }
+
+  downloadExcel(): void {
+    this.excelDownLoad.emit(true);
+    // Sample data to be written into the Excel file
+    
+    // const data = [
+    //   { id: 1, name: 'Product 1', price: 100 },
+    //   { id: 2, name: 'Product 2', price: 150 },
+    //   { id: 3, name: 'Product 3', price: 200 }
+    // ];
+
+    
+    // Generate Excel file as base64 string
+     }
+
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -308,7 +338,8 @@ export class CommonTableGridComponent {
 
   // int? pagenumber, int? pagesize, string? sortedcolumn, string? sorteddirection
   announceSortChange(sortState: Sort) {
-    console.log('i am sorted');
+    this.selection.clear();
+    // this.selection.clear();
     if (sortState.direction) {
       this.sortedcolumn = sortState.active;
       this.sorteddirection = sortState.direction;

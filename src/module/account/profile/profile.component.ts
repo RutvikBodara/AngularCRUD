@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
-import { CommonModule, DatePipe, registerLocaleData } from '@angular/common';
+import { CommonModule, DatePipe, Location, registerLocaleData } from '@angular/common';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
@@ -60,19 +60,27 @@ export class ProfileComponent {
   RequestData: updateProfileRequest;
   @ViewChild('editBtns') editBtnClick: ElementRef;
   @ViewChild('resetBtn') resetBtnClick: ElementRef;
-
+  @ViewChild('backbtn') backbtnClick :ElementRef;
+  
   constructor(
     private router: Router,
 
     private fb: FormBuilder,
     private commonService: CommonService,
-    private componentService: ComponentService
+    private componentService: ComponentService,
+    private _location: Location
   ) {}
 
   ngOnInit() {
     this.commonService.updatePage('My Profile');
     //get profile details
     this.callData();
+  }
+
+  ngAfterViewInit(){
+    fromEvent(this.backbtnClick.nativeElement,"click").subscribe((Res)=>{
+      this._location.back()
+    })
   }
 
   checkFormChanges(): void {

@@ -7,6 +7,7 @@ import { HttpClient, HttpClientModule, HttpHeaders, HttpParams } from '@angular/
 import { delay, Observable, retryWhen, scan, shareReplay } from 'rxjs';
 import { error } from 'node:console';
 import { DOCUMENT } from '@angular/common';
+import { CommonService } from './common.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +17,8 @@ export class ComponentService {
   {
 
   }
+
+ 
   //passs perameter
   //output will be result of string
   //method will be string
@@ -30,7 +33,8 @@ export class ComponentService {
     sortcolumn?,
     sortdirection?,
     pageNumber?,
-    pageSize?
+    pageSize?,
+    excelDownLoadStatus?
   ):Observable<any>
   {
     let parameters =new HttpParams()
@@ -61,6 +65,9 @@ export class ComponentService {
     }
     if(pageSize){
       parameters =parameters.set('pagesize',pageSize)
+    }
+    if(excelDownLoadStatus){
+      parameters =parameters.set('download',excelDownLoadStatus)
     }
     return this.http.get(suburl,{params:parameters}).pipe(shareReplay())
   }

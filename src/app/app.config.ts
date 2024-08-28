@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideAnimationsAsync(),
     //ngxs
-    provideStore(),
+    provideStore([]),
     withNgxsLoggerPlugin(),
     // provideAnimationsAsync(),
     // provideAnimationsAsync(),

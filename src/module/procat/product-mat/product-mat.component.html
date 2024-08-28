@@ -124,6 +124,7 @@
     [actionBtnAllowed]="actionBtnAllowed"
     [paginationAllowed]="paginationAllowed"
     [bulkDeleteEnable]="bulkDeleteEnable"
+    [download]="true"
     (paginationChanged)="paginationChanged($event)"
     (orderChanged)="orderChanged($event)"
     (paginationChanged)="paginationChanged($event)"
@@ -131,6 +132,8 @@
     (deleteIdEmit)="deletePopUp($event)"
     (potentialEdit)="onEditButtonClick($event)"
     (selectedDeleteBulk)="onDeleteBulkProduct($event)"
+    (excelDownLoad)="onExcelDownLoad($event)"
+    (exportPDF)="exportPDF($event)"
   >
   </app-common-table-grid>
 </ng-container>
