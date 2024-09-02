@@ -208,6 +208,29 @@ export class CommonService {
     }
   }
 
+  downloadExcelBase64(base64Data) {
+    // Step 1: Decode the Base64 string
+    const binaryString = atob(base64Data);
+    const binaryLen = binaryString.length;
+    const bytes = new Uint8Array(binaryLen);
+
+    for (let i = 0; i < binaryLen; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    // Step 2: Create a Blob from the binary data
+    const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    // Step 3: Create a download link and trigger the download
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'your_file_name.xlsx'; // Change to your desired file name
+    link.click();
+
+    // Optionally, revoke the object URL after download
+    window.URL.revokeObjectURL(link.href);
+  }
+
   generateExcel(data: any[]): string {
     // Create a new workbook
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
@@ -226,7 +249,16 @@ export class CommonService {
     for (let i = 0; i < binary.length; i++) {
       view[i] = binary.charCodeAt(i);
     }
+    //base6
     const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
     saveAs(blob, `${fileName}.xlsx`);
+  }
+
+  downloadPdf(base64String:string,fileName:string):void{
+    const linkSource = `data:application/pdf;base64,${base64String}`;
+    const downloadLink = document.createElement("a");
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
   }
 }

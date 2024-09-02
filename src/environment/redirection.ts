@@ -2,6 +2,7 @@ export const  APIURL = {
     getContact:"contacts/getcontacts",
     getContactType:"contacts/getcontactstype",
     getProduct:"product/getproducts",
+    getAllProduct:"product/getproductsbase64",
     getCategory:"category/getCategory",
     deleteContact:"contacts/deletecontacts",
     deleteContacttype:"contacts/deletecontactstype",

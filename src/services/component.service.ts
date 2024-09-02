@@ -34,7 +34,8 @@ export class ComponentService {
     sortdirection?,
     pageNumber?,
     pageSize?,
-    excelDownLoadStatus?
+    excelDownLoadStatus?,
+    docType?
   ):Observable<any>
   {
     let parameters =new HttpParams()
@@ -68,6 +69,9 @@ export class ComponentService {
     }
     if(excelDownLoadStatus){
       parameters =parameters.set('download',excelDownLoadStatus)
+    }
+    if(docType){
+      parameters =parameters.set('doctype',docType)
     }
     return this.http.get(suburl,{params:parameters}).pipe(shareReplay())
   }
