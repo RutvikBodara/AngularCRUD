@@ -19,7 +19,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatButtonModule,
     MatToolbarModule,
     MatSidenavModule,
-   
   ],
   providers: [],
   bootstrap: []

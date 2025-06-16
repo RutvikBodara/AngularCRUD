@@ -104,7 +104,6 @@ export class ProductMatComponent {
   ) {}
 
   // @ViewChild(MatSort) sort: MatSort;
-
   // @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
@@ -134,7 +133,6 @@ export class ProductMatComponent {
   }
 
   // ngAfterViewInit() {
-
   //   // this.paginator.page.subscribe((event: PageEvent) => {
   //   //   console.log('Page Index:', event.pageIndex);
   //   //   this.pagenumber=event.pageIndex+1;
@@ -167,12 +165,12 @@ export class ProductMatComponent {
       this.getAllProduct();
     }
   }
-
+   
   exportPDF(event) {
     if (event) {
       this.doctype = 2;
       this.pdfDownload = true;
-      this.getAllProduct();
+      this.getProduct();
     }
   }
 
@@ -231,7 +229,7 @@ export class ProductMatComponent {
     this.bulkDelete = false;
     this.deleteId = data.id;
     this.commonService.updateDeleteTagLine(
-      'once you delete product,this product no longer'
+      'once you delete product,this product no longer available for sale'
     );
     this.commonService.updateDeleteTitle('Delete Product?');
     this.commonDeletePopup();
@@ -349,7 +347,7 @@ export class ProductMatComponent {
         }
       });
   }
-
+  
   getProduct() {
     this.getProductSubscription = this.componentServices
       .get<string>(

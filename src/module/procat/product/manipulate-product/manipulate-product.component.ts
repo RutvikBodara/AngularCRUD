@@ -39,7 +39,8 @@ import { Conditional } from '@angular/compiler';
 import { Sort } from '@angular/material/sort';
 import { ContentObserver } from '@angular/cdk/observers';
 import { fromEvent, Subscription } from 'rxjs';
-
+import { CommonBtnComponent } from '../../../common/common-btn/common-btn.component';
+import { constrainedMemory } from 'process';
 @Component({
   selector: 'app-manipulate-product',
   standalone: true,
@@ -58,6 +59,7 @@ import { fromEvent, Subscription } from 'rxjs';
     MatSelectModule,
     MatGridListModule,
     MatDatepickerModule,
+    CommonBtnComponent
   ],
   templateUrl: './manipulate-product.component.html',
   styleUrl: './manipulate-product.component.css',
@@ -72,9 +74,10 @@ export class ManipulateProductComponent {
   filename;
   productSubscription :Subscription;
   selectedCountry: Sort[] = [];
+  btnColor="btn-outline-warning"
+  btnText= "back"
   @ViewChild('backbtn') backbtnClick :ElementRef;
   
-
   task = signal<Task>({
     id: -1,
     name: 'Select All',
@@ -165,6 +168,10 @@ export class ManipulateProductComponent {
     fromEvent(this.backbtnClick.nativeElement,"click").subscribe((Res)=>{
       this.router.navigate(['/contact/productmat'])
     })
+  }
+  backBtnClicked(value){
+    console.log("aidsb")
+    this.router.navigate(['/contact/productmat'])
   }
   ngOnInit() {
     this.commonService.updatePage('Edit Products');
@@ -371,4 +378,4 @@ export class ManipulateProductComponent {
       reader.onerror = (error) => reject(error);
     });
   }
-}
+} 

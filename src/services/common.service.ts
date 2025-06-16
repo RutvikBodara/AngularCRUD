@@ -51,13 +51,12 @@ export class CommonService {
   private isSessionActive: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
   isSessionActive$ = this.isSessionActive.asObservable();
-
   loaderVisibility$ = this.loaderVisibility.asObservable();
 
   private deleteTagLine: BehaviorSubject<string> = new BehaviorSubject<string>(
     'no data to delete'
   );
-  deleteTagLine$ = this.deleteTagLine.asObservable();
+  deleteTagLine$ = this.deleteTagLine.asObservable(); 
 
   private deleteTitle: BehaviorSubject<string> = new BehaviorSubject<string>(
     'delete title'
@@ -74,7 +73,6 @@ export class CommonService {
     false
   );
   clearSelection$ = this.clearSelection.asObservable();
-
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -253,7 +251,7 @@ export class CommonService {
     const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
     saveAs(blob, `${fileName}.xlsx`);
   }
-
+    
   downloadPdf(base64String:string,fileName:string):void{
     const linkSource = `data:application/pdf;base64,${base64String}`;
     const downloadLink = document.createElement("a");

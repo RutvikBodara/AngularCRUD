@@ -1,5 +1,5 @@
 @mixin sp-layout {
-    @media screen and (max-width: 100vw) {
+    @media screen and (max-width: 200vw) {
       @content;
     }
   }
@@ -13,12 +13,12 @@
   .stars {
     position: fixed;
     right: 0;
-    width: 200%;
-    height: 240%;
-    transform: rotate(135deg);
+    // width: 200%;
+    // height: 240%;
+    // transform: rotate(135deg);
   }
   .star {
-    $star-count: 50;
+    $star-count: 150;
     --star-color: var(--primary-color);
     --star-tail-length: 6em;
     --star-tail-height: 2px;
